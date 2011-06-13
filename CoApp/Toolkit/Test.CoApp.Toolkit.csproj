@@ -1,0 +1,223 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B25D6C21-3F5D-4000-9347-FF94A36EF925}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Test.CoApp.Toolkit</RootNamespace>
+    <AssemblyName>Test.CoApp.ToolKit</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDependentAssemblyPaths Condition=" '$(VS100COMNTOOLS)' != '' " Include="$(VS100COMNTOOLS)..\IDE\PrivateAssemblies">
+      <Visible>False</Visible>
+    </CodeAnalysisDependentAssemblyPaths>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Win32\AdminPrivilegeTest.cs" />
+    <Compile Include="Win32\Advapi32Test.cs" />
+    <Compile Include="Win32\AlternateDataStreamInfoTest.cs" />
+    <Compile Include="Win32\ClipboardNotifierTest.cs" />
+    <Compile Include="Win32\FileSystemTest.cs" />
+    <Compile Include="Win32\FocusInputRecordTest.cs" />
+    <Compile Include="Win32\HardLinkTest.cs" />
+    <Compile Include="Win32\ImageCoffHeaderTest.cs" />
+    <Compile Include="Win32\ImageCor20HeaderTest.cs" />
+    <Compile Include="Win32\ImageOptionalHeaderNtTest.cs" />
+    <Compile Include="Win32\Kernel32Test.cs" />
+    <Compile Include="Win32\KeyInputRecordTest.cs" />
+    <Compile Include="Win32\LegacySymlinkTest.cs" />
+    <Compile Include="Win32\MenuItemInfoTest.cs" />
+    <Compile Include="Win32\ModernSymlinkTest.cs" />
+    <Compile Include="Win32\NtdllTest.cs" />
+    <Compile Include="Win32\PEInfoTest.cs" />
+    <Compile Include="Win32\ProcessInformationTest.cs" />
+    <Compile Include="Win32\ReparsePointTest.cs" />
+    <Compile Include="Win32\SafeTokenHandleTest.cs" />
+    <Compile Include="Win32\SecurityAttributesTest.cs" />
+    <Compile Include="Win32\StartupinfoTest.cs" />
+    <Compile Include="Win32\SymlinkTest.cs" />
+    <Compile Include="Win32\SystemHotkeyTest.cs" />
+    <Compile Include="Win32\User32Test.cs" />
+    <Compile Include="Utility\DependencyInformationTest.cs" />
+    <Compile Include="Utility\PathEqualityComparerTest.cs" />
+    <Compile Include="Utility\ProcessUtilityTest.cs" />
+    <Compile Include="Utility\ProgramFinderTest.cs" />
+    <Compile Include="Trace\CommandLineTest.cs" />
+    <Compile Include="Trace\EnvironmentVariableIndexerTest.cs" />
+    <Compile Include="Trace\FileIndexerByHandleTest.cs" />
+    <Compile Include="Trace\FileIndexerTest.cs" />
+    <Compile Include="Trace\FileTest.cs" />
+    <Compile Include="Trace\ProcessIndexerTest.cs" />
+    <Compile Include="Trace\ProcessTest.cs" />
+    <Compile Include="Text\Sgml\AttDefTest.cs" />
+    <Compile Include="Text\Sgml\AttributeTest.cs" />
+    <Compile Include="Text\Sgml\ContentModelTest.cs" />
+    <Compile Include="Text\Sgml\ElementDeclTest.cs" />
+    <Compile Include="Text\Sgml\EntityTest.cs" />
+    <Compile Include="Text\Sgml\GroupTest.cs" />
+    <Compile Include="Text\Sgml\SgmlDtdTest.cs" />
+    <Compile Include="Text\Sgml\SgmlParseExceptionTest.cs" />
+    <Compile Include="Text\Sgml\SgmlReaderTest.cs" />
+    <Compile Include="Text\HttpUtilityTest.cs" />
+    <Compile Include="Tasks\CoTaskFactoryTest.cs" />
+    <Compile Include="Tasks\CoTaskTest.cs" />
+    <Compile Include="Tasks\MessageHandlersTest.cs" />
+    <Compile Include="Tasks\OperationCompletedBeforeResultExceptionTest.cs" />
+    <Compile Include="Spec\EventTest.cs" />
+    <Compile Include="Spec\FileGroupTest.cs" />
+    <Compile Include="Spec\LibraryTest.cs" />
+    <Compile Include="Spec\LinkTest.cs" />
+    <Compile Include="Spec\ProcessTest.cs" />
+    <Compile Include="Spec\ProductInfoTest.cs" />
+    <Compile Include="Shell\ColorTableTest.cs" />
+    <Compile Include="Shell\ConsolePropertiesTest.cs" />
+    <Compile Include="Shell\CoordinateTest.cs" />
+    <Compile Include="Shell\IconLocationTest.cs" />
+    <Compile Include="Scripting\Languages\PropertySheet\DictionaryPropertyTest.cs" />
+    <Compile Include="Scripting\Languages\PropertySheet\IndexerTest.cs" />
+    <Compile Include="Scripting\Languages\PropertySheet\PropertySheetItemTest.cs" />
+    <Compile Include="Scripting\Languages\PropertySheet\PropertySheetParserTest.cs" />
+    <Compile Include="Scripting\Languages\PropertySheet\PropertySheetTest.cs" />
+    <Compile Include="Scripting\Languages\PropertySheet\PropertySheetTokenizerTest.cs" />
+    <Compile Include="Scripting\Languages\PropertySheet\RulePropertyExtensionsTest.cs" />
+    <Compile Include="Scripting\Languages\PropertySheet\RulePropertyTest.cs" />
+    <Compile Include="Scripting\Languages\PropertySheet\RuleTest.cs" />
+    <Compile Include="Scripting\Languages\GSharp\GSharpProcessorTest.cs" />
+    <Compile Include="Scripting\Languages\GSharp\GSharpTokenizerTest.cs" />
+    <Compile Include="Scripting\Languages\CSV\Exceptions\MalformedCsvExceptionTest.cs" />
+    <Compile Include="Scripting\Languages\CSV\Exceptions\MissingFieldCsvExceptionTest.cs" />
+    <Compile Include="Scripting\Languages\CSV\Events\ParseErrorEventArgsTest.cs" />
+    <Compile Include="Scripting\Languages\CSV\CachedCsvReaderTest.cs" />
+    <Compile Include="Scripting\Languages\CSharp\CSharpTokenizerTest.cs" />
+    <Compile Include="Scripting\Languages\CSV\CsvReaderTest.cs" />
+    <Compile Include="Scripting\Languages\CSV\CsvReader_RecordEnumeratorTest.cs" />
+    <Compile Include="Scripting\ActiveScriptHostTest.cs" />
+    <Compile Include="Extensions\AssemblyExtensionsTest.cs" />
+    <Compile Include="Extensions\CollectionExtensionsTest.cs" />
+    <Compile Include="Collections\ExpiringDictionaryTest.cs" />
+    <Compile Include="Collections\LazyEnumerableTest.cs" />
+    <Compile Include="Collections\LazyEnumerable_LazyEnumeratorTest.cs" />
+    <Compile Include="Extensions\CommandLineExtensionsTest.cs" />
+    <Compile Include="Extensions\ComparerTest.cs" />
+    <Compile Include="Extensions\ComplexOptionTest.cs" />
+    <Compile Include="Extensions\ConsoleColorsTest.cs" />
+    <Compile Include="Extensions\ConsoleExtensionsTest.cs" />
+    <Compile Include="Extensions\CookieExtensionsTest.cs" />
+    <Compile Include="Extensions\DebugExtensionsTest.cs" />
+    <Compile Include="Extensions\DebugMessageTest.cs" />
+    <Compile Include="Exceptions\ConflictingFileOrFolderExceptionTest.cs" />
+    <Compile Include="Exceptions\ConsoleExceptionTest.cs" />
+    <Compile Include="Console\ConsoleApiTest.cs" />
+    <Compile Include="Crypto\PfxStoreLoaderTest.cs" />
+    <Compile Include="DynamicXml\DynamicAttributesTest.cs" />
+    <Compile Include="DynamicXml\DynamicDataRowTest.cs" />
+    <Compile Include="DynamicXml\DynamicDataSetTest.cs" />
+    <Compile Include="DynamicXml\DynamicDataTableTest.cs" />
+    <Compile Include="DynamicXml\DynamicNodeTest.cs" />
+    <Compile Include="Exceptions\EndUserExceptionTest.cs" />
+    <Compile Include="Exceptions\EndUserParseExceptionTest.cs" />
+    <Compile Include="Exceptions\EndUserPropertyExceptionTest.cs" />
+    <Compile Include="Exceptions\EndUserRuleExceptionTest.cs" />
+    <Compile Include="Exceptions\PathIsNotSymlinkExceptionTest.cs" />
+    <Compile Include="Extensions\FilesystemExtensionsTest.cs" />
+    <Compile Include="Extensions\LinqExtensionsTest.cs" />
+    <Compile Include="Extensions\ObservableExtensionsTest.cs" />
+    <Compile Include="Scripting\IActiveScriptErrorTest.cs" />
+    <Compile Include="Scripting\IDispatchTest.cs" />
+    <Compile Include="Scripting\JScriptTest.cs" />
+    <Compile Include="Package\HuidTest.cs" />
+    <Compile Include="Network\FTPTest.cs" />
+    <Compile Include="Network\HttpServerTest.cs" />
+    <Compile Include="Scan\ProjectScannerTest.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Collections\VirtualEnumeratorTest.cs" />
+    <Compile Include="Configuration\RegistryViewTest.cs" />
+    <Compile Include="Crypto\VerifierTest.cs" />
+    <Compile Include="Crypto\WinTrustDataTest.cs" />
+    <Compile Include="Extensions\PropertySheetExtensionsTest.cs" />
+    <Compile Include="Extensions\SortedObservableCollectionTest.cs" />
+    <Compile Include="Extensions\StringExtensionsTest.cs" />
+    <Compile Include="Extensions\WebExtensionsTest.cs" />
+    <Compile Include="Extensions\X509Certificate2ExtensionsTest.cs" />
+    <Compile Include="Extensions\X509StoreExtensionsTest.cs" />
+    <Compile Include="Extensions\XmlExtensionsTest.cs" />
+    <Compile Include="Network\RemoteFileTest.cs" />
+    <Compile Include="Network\TransferManagerTest.cs" />
+    <Compile Include="Scan\Types\ScannedDefineTest.cs" />
+    <Compile Include="Scan\Types\ScannedFileTest.cs" />
+    <Compile Include="Scan\Types\ScanReportTest.cs" />
+    <Compile Include="Scripting\VBScriptTest.cs" />
+    <Compile Include="Scripting\Utility\TokenizerTest.cs" />
+    <Compile Include="Scripting\Utility\TokenTest.cs" />
+    <Compile Include="Shell\ShellLinkTest.cs" />
+    <Compile Include="Spec\SpecFileTest.cs" />
+    <Compile Include="Tasks\TaskExtensionsTest.cs" />
+    <Compile Include="Tasks\TaskletTest.cs" />
+    <Compile Include="Tasks\TriggeredPropertyTest.cs" />
+    <Compile Include="Trace\TraceTest.cs" />
+    <Compile Include="Trace\VariableTest.cs" />
+    <Compile Include="Win32\WindowsVersionInfoTest.cs" />
+    <Compile Include="Win32\WinmmTest.cs" />
+    <Compile Include="Win32\WinTrustTest.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\toolkit\CoApp.Toolkit.csproj">
+      <Project>{8B7E0D2F-6CA0-4E5E-BF52-1E4BDB132BBC}</Project>
+      <Name>CoApp.Toolkit</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Shadow Include="Test References\CoApp.Toolkit.accessor" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
