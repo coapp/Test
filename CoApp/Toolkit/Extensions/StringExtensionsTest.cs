@@ -1,4 +1,6 @@
-﻿using CoApp.Toolkit.Extensions;
+﻿using System.Collections;
+using System.IO;
+using CoApp.Toolkit.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
@@ -18,6 +20,7 @@ namespace Test.CoApp.Toolkit.Extensions
 
 
         private TestContext testContextInstance;
+        private static List<string> testStrings;
 
         /// <summary>
         ///Gets or sets the test context which provides
@@ -40,10 +43,15 @@ namespace Test.CoApp.Toolkit.Extensions
         //You can use the following additional attributes as you write your tests:
         //
         //Use ClassInitialize to run code before running the first test in the class
-        //[ClassInitialize()]
-        //public static void MyClassInitialize(TestContext testContext)
-        //{
-        //}
+        [ClassInitialize()]
+        public static void MyClassInitialize(TestContext testContext)
+        {
+            testStrings = new List<string>();
+            StreamReader In = new StreamReader("..\\..\\..\\..\\Test\\CoApp\\Toolkit\\Extensions\\TestStrings.txt");
+            //StreamReader In = new StreamReader("..\\Extensions\\TestStrings.txt");
+            testStrings.AddRange(In.ReadToEnd().Split('\n'));
+            In.Close();
+        }
         //
         //Use ClassCleanup to run code after all tests in a class have run
         //[ClassCleanup()]
@@ -69,141 +77,125 @@ namespace Test.CoApp.Toolkit.Extensions
         /// <summary>
         ///A test for ContainsIgnoreCase
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\ContainStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\ContainStrings.csv", "ContainStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void ContainsIgnoreCaseTest()
         {
-            IEnumerable<string> source = null; // TODO: Initialize to an appropriate value
-            string value = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            IEnumerable<string> source = testStrings;
+            string value = (string)testContextInstance.DataRow["STR"];
+            bool expected = false;
+            if ((int)testContextInstance.DataRow["exists"] > 0)
+                expected = true;
             bool actual;
-            actual = StringExtensions.ContainsIgnoreCase(source, value);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            actual = source.ContainsIgnoreCase(value);
+            Assert.AreEqual(expected, actual, "String "+value+"  --  Expected: "+expected+"  Actual: "+actual);
         }
 
         /// <summary>
         ///A test for CreateGuid
+        /// TR01: TODO: Confirm this test.
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\GuidStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\GuidStrings.csv", "GUIDStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void CreateGuidTest()
         {
-            string str = string.Empty; // TODO: Initialize to an appropriate value
-            Guid expected = new Guid(); // TODO: Initialize to an appropriate value
+            string str = (string)testContextInstance.DataRow["STR"];
+            string expected = (string)testContextInstance.DataRow["GUID"];
             Guid actual;
-            actual = StringExtensions.CreateGuid(str);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            actual = str.CreateGuid();
+            Assert.IsTrue(expected.Equals(actual.ToString()), "GUID did not match.  Expected: "+expected+", Actual: "+actual);
         }
 
         /// <summary>
         ///A test for CreatePublicKeyToken
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void CreatePublicKeyTokenTest()
         {
-            string publicKey = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            string publicKey = string.Empty;
+            string expected = string.Empty;
             string actual;
-            actual = StringExtensions.CreatePublicKeyToken(publicKey);
+            actual = publicKey.CreatePublicKeyToken();
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for Error
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void ErrorTest()
         {
-            string formatString = string.Empty; // TODO: Initialize to an appropriate value
-            object[] args = null; // TODO: Initialize to an appropriate value
-            StringExtensions.Error(formatString, args);
+            string formatString = string.Empty;
+            object[] args = null;
+            formatString.Error(args);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 
         /// <summary>
         ///A test for ExtendVersion
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void ExtendVersionTest()
         {
-            string input = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            string input = string.Empty;
+            string expected = string.Empty;
             string actual;
-            actual = StringExtensions.ExtendVersion(input);
+            actual = input.ExtendVersion();
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
-        ///A test for Gunzip
+        ///A test for Compress/Decompress
+        /// TR01: TODO: verify.
         ///</summary>
-        [TestMethod()]
-        public void GunzipTest()
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\CompressStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\CompressStrings.csv", "CompressStrings#csv", DataAccessMethod.Sequential), TestMethod()]
+        public void CompressDecompressTest()
         {
-            byte[] input = null; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
-            string actual;
-            actual = StringExtensions.Gunzip(input);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            string input = (string)testContextInstance.DataRow["STR"];
+            byte[] bytes;
+            bytes = input.Gzip();
+            Assert.IsTrue(input.ToByteArray().LongLength > bytes.LongLength, "Compressed object is not smaller than decompressed object.");
+
+            string output;
+            output = bytes.Gunzip();
+            Assert.AreEqual(input,output, "Decompressed output does not match input.");
         }
 
         /// <summary>
-        ///A test for GunzipFromBase64
+        ///A test for Compress64/Decompress64
+        /// TR01: TODO: verify.
         ///</summary>
-        [TestMethod()]
-        public void GunzipFromBase64Test()
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\CompressStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\CompressStrings.csv", "CompressStrings#csv", DataAccessMethod.Sequential), TestMethod()]
+        public void CompressDecompress64Test()
         {
-            string input = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
-            string actual;
-            actual = StringExtensions.GunzipFromBase64(input);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
+            string input = (string)testContextInstance.DataRow["STR"];
+            string compressed;
+            compressed = input.GzipToBase64();
+            Assert.IsTrue(input.ToByteArray().LongLength > compressed.ToByteArray().LongLength, "Compressed object is not smaller than decompressed object.");
 
-        /// <summary>
-        ///A test for Gzip
-        ///</summary>
-        [TestMethod()]
-        public void GzipTest()
-        {
-            string input = string.Empty; // TODO: Initialize to an appropriate value
-            byte[] expected = null; // TODO: Initialize to an appropriate value
-            byte[] actual;
-            actual = StringExtensions.Gzip(input);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for GzipToBase64
-        ///</summary>
-        [TestMethod()]
-        public void GzipToBase64Test()
-        {
-            string input = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
-            string actual;
-            actual = StringExtensions.GzipToBase64(input);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            string output;
+            output = compressed.GunzipFromBase64();
+            Assert.AreEqual(input, output, "Decompressed output does not match input.");
         }
 
         /// <summary>
         ///A test for HasWildcardMatch
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\ContainStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\ContainStrings.csv", "ContainStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void HasWildcardMatchTest()
         {
-            IEnumerable<string> source = null; // TODO: Initialize to an appropriate value
-            string value = string.Empty; // TODO: Initialize to an appropriate value
-            string ignorePrefix = string.Empty; // TODO: Initialize to an appropriate value
-            bool escapePrefix = false; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            IEnumerable<string> source = testStrings;
+            string value = (string)testContextInstance.DataRow["STR"];
+            ///////////////
+            string ignorePrefix = string.Empty;
+            bool escapePrefix = false;
+            bool expected = false;
             bool actual;
-            actual = StringExtensions.HasWildcardMatch(source, value, ignorePrefix, escapePrefix);
+            actual = source.HasWildcardMatch(value, ignorePrefix, escapePrefix);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -211,107 +203,141 @@ namespace Test.CoApp.Toolkit.Extensions
         /// <summary>
         ///A test for IsEmail
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\EmailStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\EmailStrings.csv", "EmailStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void IsEmailTest()
         {
-            string email = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string email = (string)testContextInstance.DataRow["STR"];
+            bool expected;
+            if ((int)testContextInstance.DataRow["isEmail"] > 0)
+                expected = true;
+            else
+                expected = false;
             bool actual;
-            actual = StringExtensions.IsEmail(email);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            actual = email.IsEmail();
+            Assert.AreEqual(expected, actual, "String \""+email+"\"  Expected: "+expected+"  Actual: "+actual);
         }
 
         /// <summary>
         ///A test for IsFalse
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\TrueFalseStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\TrueFalseStrings.csv", "TrueFalseStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void IsFalseTest()
         {
-            string text = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string text = (string)testContextInstance.DataRow["STR"];
+            bool expected = false;
+            if ((int)testContextInstance.DataRow["False"] > 0)
+                expected = true;
             bool actual;
-            actual = StringExtensions.IsFalse(text);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            actual = text.IsFalse();
+            Assert.AreEqual(expected, actual, "String \"" + text + "\"  Expected: " + expected + "  Actual: " + actual);
         }
 
         /// <summary>
         ///A test for IsTrue
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\TrueFalseStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\TrueFalseStrings.csv", "TrueFalseStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void IsTrueTest()
         {
-            string text = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string text = (string)testContextInstance.DataRow["STR"];
+            bool expected = false;
+            if ((int)testContextInstance.DataRow["True"] > 0)
+                expected = true;
             bool actual;
-            actual = StringExtensions.IsTrue(text);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            actual = text.IsTrue();
+            Assert.AreEqual(expected, actual, "String \"" + text + "\"  Expected: " + expected + "  Actual: " + actual);
         }
 
         /// <summary>
         ///A test for IsValidMajorMinorVersion
+        /// TR01: TODO: Verify correct testing.
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\VersionStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\VersionStrings.csv", "VersionStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void IsValidMajorMinorVersionTest()
         {
-            string input = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string input = (string)testContextInstance.DataRow["STR"];
+            bool expected = false;
+            if ((int)testContextInstance.DataRow["MajorMinor"] > 0)
+                expected = true;
             bool actual;
-            actual = StringExtensions.IsValidMajorMinorVersion(input);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            actual = input.IsValidMajorMinorVersion();
+            Assert.AreEqual(expected, actual, "String \"" + input + "\"  Expected: " + expected + "  Actual: " + actual);
         }
 
         /// <summary>
         ///A test for IsValidVersion
+        /// TR01: TODO: Verify correct testing.
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\VersionStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\VersionStrings.csv", "VersionStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void IsValidVersionTest()
         {
-            string input = string.Empty; // TODO: Initialize to an appropriate value
-            bool strict = false; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string input = (string) testContextInstance.DataRow["STR"];
+            bool general = false;
+            bool strict = false;
+            bool expected = false;
             bool actual;
-            actual = StringExtensions.IsValidVersion(input, strict);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            if ((int) testContextInstance.DataRow["General"] > 0)
+                general = true;
+            if (general)
+            {
+                if ((int)testContextInstance.DataRow["Strict"] > 0)
+                {
+                    strict = true;
+                    expected = true;
+                    actual = input.IsValidVersion(strict);
+                    Assert.AreEqual(expected, actual, "On input \""+input+"\": Is strict-compliant, failed strict test.");
+                }
+                strict = false;
+                expected = true;
+                actual = input.IsValidVersion(strict);
+                Assert.AreEqual(expected, actual, "On input \"" + input + "\": Is generally compliant, failed non-strict test.");
+            }
+            else
+            {
+                actual = input.IsValidVersion(strict);
+                Assert.AreEqual(expected, actual, "On input\"" + input + "\": non-compliant string was accepted as valid under non-strict.");
+                strict = true;
+                actual = input.IsValidVersion(strict);
+                Assert.AreEqual(expected, actual, "On input\""+input+"\": non-compliant string was accepted as valid under strict.");
+            }
+
         }
 
         /// <summary>
         ///A test for IsValidVersionPart
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void IsValidVersionPartTest()
         {
-            string input = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string input = string.Empty;
+            bool expected = false;
             bool actual;
-            actual = StringExtensions.IsValidVersionPart(input);
+            actual = input.IsValidVersionPart();
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for IsWildcardMatch
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void IsWildcardMatchTest()
         {
-            string text = string.Empty; // TODO: Initialize to an appropriate value
-            string wildcardMask = string.Empty; // TODO: Initialize to an appropriate value
-            string ignorePrefix = string.Empty; // TODO: Initialize to an appropriate value
-            bool escapePrefix = false; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string text = string.Empty;
+            string wildcardMask = string.Empty;
+            string ignorePrefix = string.Empty;
+            bool escapePrefix = false;
+            bool expected = false;
             bool actual;
-            actual = StringExtensions.IsWildcardMatch(text, wildcardMask, ignorePrefix, escapePrefix);
+            actual = text.IsWildcardMatch(wildcardMask, ignorePrefix, escapePrefix);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for MD5Hash
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void MD5HashTest()
@@ -319,36 +345,38 @@ namespace Test.CoApp.Toolkit.Extensions
             string input = string.Empty; // TODO: Initialize to an appropriate value
             string expected = string.Empty; // TODO: Initialize to an appropriate value
             string actual;
-            actual = StringExtensions.MD5Hash(input);
+            actual = input.MD5Hash();
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for MakeSafeDirectoryId
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void MakeSafeDirectoryIdTest()
         {
-            string input = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            string input = string.Empty;
+            string expected = string.Empty;
             string actual;
-            actual = StringExtensions.MakeSafeDirectoryId(input);
+            actual = input.MakeSafeDirectoryId();
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for Match
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void MatchTest()
         {
-            string input = string.Empty; // TODO: Initialize to an appropriate value
-            string rxExpression = string.Empty; // TODO: Initialize to an appropriate value
-            Match expected = null; // TODO: Initialize to an appropriate value
+            string input = string.Empty;
+            string rxExpression = string.Empty;
+            Match expected = null;
             Match actual;
-            actual = StringExtensions.Match(input, rxExpression);
+            actual = input.Match(rxExpression);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -363,43 +391,46 @@ namespace Test.CoApp.Toolkit.Extensions
             string rxExpression = string.Empty; // TODO: Initialize to an appropriate value
             Match expected = null; // TODO: Initialize to an appropriate value
             Match actual;
-            actual = StringExtensions.MatchIgnoreCase(input, rxExpression);
+            actual = input.MatchIgnoreCase(rxExpression);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for OnlyContains
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void OnlyContainsTest()
         {
-            string str = string.Empty; // TODO: Initialize to an appropriate value
-            string characters = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string str = string.Empty;
+            string characters = string.Empty;
+            bool expected = false;
             bool actual;
-            actual = StringExtensions.OnlyContains(str, characters);
+            actual = str.OnlyContains(characters);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for OnlyContains
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void OnlyContainsTest1()
         {
-            string str = string.Empty; // TODO: Initialize to an appropriate value
-            char[] characters = null; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string str = string.Empty;
+            char[] characters = null;
+            bool expected = false;
             bool actual;
-            actual = StringExtensions.OnlyContains(str, characters);
+            actual = str.OnlyContains(characters);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for PositionOfFirstCharacterNotIn
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void PositionOfFirstCharacterNotInTest()
@@ -408,94 +439,100 @@ namespace Test.CoApp.Toolkit.Extensions
             string characters = string.Empty; // TODO: Initialize to an appropriate value
             int expected = 0; // TODO: Initialize to an appropriate value
             int actual;
-            actual = StringExtensions.PositionOfFirstCharacterNotIn(str, characters);
+            actual = str.PositionOfFirstCharacterNotIn(characters);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for PositionOfFirstCharacterNotIn
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void PositionOfFirstCharacterNotInTest1()
         {
-            string str = string.Empty; // TODO: Initialize to an appropriate value
-            char[] characters = null; // TODO: Initialize to an appropriate value
-            int expected = 0; // TODO: Initialize to an appropriate value
+            string str = string.Empty;
+            char[] characters = null;
+            int expected = 0;
             int actual;
-            actual = StringExtensions.PositionOfFirstCharacterNotIn(str, characters);
+            actual = str.PositionOfFirstCharacterNotIn(characters);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for Print
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void PrintTest()
         {
-            string formatString = string.Empty; // TODO: Initialize to an appropriate value
-            object[] args = null; // TODO: Initialize to an appropriate value
-            StringExtensions.Print(formatString, args);
+            string formatString = string.Empty; 
+            object[] args = null; 
+            formatString.Print(args);
             Assert.Inconclusive("A method that does not return a value cannot be verified.");
         }
 
         /// <summary>
         ///A test for ProtectBinaryForMachine
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void ProtectBinaryForMachineTest()
         {
-            IEnumerable<byte> binaryData = null; // TODO: Initialize to an appropriate value
-            string salt = string.Empty; // TODO: Initialize to an appropriate value
-            IEnumerable<byte> expected = null; // TODO: Initialize to an appropriate value
+            IEnumerable<byte> binaryData = null;
+            string salt = string.Empty;
+            IEnumerable<byte> expected = null;
             IEnumerable<byte> actual;
-            actual = StringExtensions.ProtectBinaryForMachine(binaryData, salt);
+            actual = binaryData.ProtectBinaryForMachine(salt);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for ProtectBinaryForUser
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void ProtectBinaryForUserTest()
         {
-            IEnumerable<byte> binaryData = null; // TODO: Initialize to an appropriate value
-            string salt = string.Empty; // TODO: Initialize to an appropriate value
-            IEnumerable<byte> expected = null; // TODO: Initialize to an appropriate value
+            IEnumerable<byte> binaryData = null;
+            string salt = string.Empty;
+            IEnumerable<byte> expected = null;
             IEnumerable<byte> actual;
-            actual = StringExtensions.ProtectBinaryForUser(binaryData, salt);
+            actual = binaryData.ProtectBinaryForUser(salt);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for ProtectForMachine
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void ProtectForMachineTest()
         {
-            string text = string.Empty; // TODO: Initialize to an appropriate value
-            string salt = string.Empty; // TODO: Initialize to an appropriate value
-            IEnumerable<byte> expected = null; // TODO: Initialize to an appropriate value
+            string text = string.Empty;
+            string salt = string.Empty;
+            IEnumerable<byte> expected = null;
             IEnumerable<byte> actual;
-            actual = StringExtensions.ProtectForMachine(text, salt);
+            actual = text.ProtectForMachine(salt);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for ProtectForUser
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void ProtectForUserTest()
         {
-            string text = string.Empty; // TODO: Initialize to an appropriate value
-            string salt = string.Empty; // TODO: Initialize to an appropriate value
-            IEnumerable<byte> expected = null; // TODO: Initialize to an appropriate value
+            string text = string.Empty;
+            string salt = string.Empty;
+            IEnumerable<byte> expected = null;
             IEnumerable<byte> actual;
-            actual = StringExtensions.ProtectForUser(text, salt);
+            actual = text.ProtectForUser(salt);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -506,53 +543,63 @@ namespace Test.CoApp.Toolkit.Extensions
         [TestMethod()]
         public void ToByteArrayTest()
         {
-            string text = string.Empty; // TODO: Initialize to an appropriate value
-            byte[] expected = null; // TODO: Initialize to an appropriate value
+            string text = "1aB\n\0k"; // Arbitrary string
+            byte[] expected = { (byte)'1', (byte)'a', (byte)'B', (byte)'\n',(byte)'\0', (byte)'k'};
             byte[] actual;
-            actual = StringExtensions.ToByteArray(text);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            actual = text.ToByteArray();
+            bool good = true;
+            for (int i = 0; i < actual.Length; i++)
+                if (actual[i] != expected[i])
+                    good = false;
+            Assert.IsTrue(good, "String \""+text+"\"  --  Expected: "+expected+"  Actual: "+actual);
         }
 
         /// <summary>
         ///A test for ToInt32
         ///</summary>
-        [TestMethod()]
-        public void ToInt32Test()
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\NumericStrings.csv", "NumericStrings#csv", DataAccessMethod.Sequential), DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\NumericStrings.csv"), TestMethod()]
+        public void ToInt32TestWithDefault()
         {
-            string str = string.Empty; // TODO: Initialize to an appropriate value
-            int defaultValue = 0; // TODO: Initialize to an appropriate value
-            int expected = 0; // TODO: Initialize to an appropriate value
+            string str = (string)testContextInstance.DataRow["STR"];
+            int defaultValue = 30; // Arbitrary value
+            int expected;
+            if ((int)testContextInstance.DataRow["is32"] > 0)
+                expected = int.Parse(str);
+            else
+                expected = defaultValue;
             int actual;
-            actual = StringExtensions.ToInt32(str, defaultValue);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            actual = str.ToInt32(defaultValue);
+            Assert.AreEqual(expected, actual, "String \"" + str + "\"  --  Expected: " + expected + "  Actual: " + actual);
         }
 
         /// <summary>
         ///A test for ToInt32
         ///</summary>
-        [TestMethod()]
-        public void ToInt32Test1()
+        [DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\NumericStrings.csv", "NumericStrings#csv", DataAccessMethod.Sequential), DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\NumericStrings.csv"), TestMethod()]
+        public void ToInt32TestNoDefault()
         {
-            string str = string.Empty; // TODO: Initialize to an appropriate value
-            int expected = 0; // TODO: Initialize to an appropriate value
+            string str = (string)testContextInstance.DataRow["STR"];
+            int expected;
+            if ((int)testContextInstance.DataRow["is32"] > 0)
+                expected = int.Parse(str);
+            else
+                expected = 0;
             int actual;
-            actual = StringExtensions.ToInt32(str);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            actual = str.ToInt32();
+            Assert.AreEqual(expected, actual, "String \"" + str + "\"  --  Expected: " + expected + "  Actual: " + actual);
         }
 
         /// <summary>
         ///A test for ToUtf8String
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void ToUtf8StringTest()
         {
-            IEnumerable<byte> bytes = null; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            IEnumerable<byte> bytes = null;
+            string expected = string.Empty;
             string actual;
-            actual = StringExtensions.ToUtf8String(bytes);
+            actual = bytes.ToUtf8String();
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -563,70 +610,73 @@ namespace Test.CoApp.Toolkit.Extensions
         [TestMethod()]
         public void UInt64VersiontoStringTest()
         {
-            ulong version = 0; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            ulong version = 71777214294589695; // Arbitrary uint64
+            string expected = "255.255.255.255"; // Matching version string
             string actual;
-            actual = StringExtensions.UInt64VersiontoString(version);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            actual = version.UInt64VersiontoString();
+            Assert.AreEqual(expected, actual, "Version "+version+"  --  Expected: "+expected+"  Actual: "+actual);
         }
 
         /// <summary>
         ///A test for UnprotectBinaryForMachine
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void UnprotectBinaryForMachineTest()
         {
-            IEnumerable<byte> binaryData = null; // TODO: Initialize to an appropriate value
-            string salt = string.Empty; // TODO: Initialize to an appropriate value
-            IEnumerable<byte> expected = null; // TODO: Initialize to an appropriate value
+            IEnumerable<byte> binaryData = null;
+            string salt = string.Empty;
+            IEnumerable<byte> expected = null;
             IEnumerable<byte> actual;
-            actual = StringExtensions.UnprotectBinaryForMachine(binaryData, salt);
+            actual = binaryData.UnprotectBinaryForMachine(salt);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for UnprotectBinaryForUser
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void UnprotectBinaryForUserTest()
         {
-            IEnumerable<byte> binaryData = null; // TODO: Initialize to an appropriate value
-            string salt = string.Empty; // TODO: Initialize to an appropriate value
-            IEnumerable<byte> expected = null; // TODO: Initialize to an appropriate value
+            IEnumerable<byte> binaryData = null;
+            string salt = string.Empty;
+            IEnumerable<byte> expected = null;
             IEnumerable<byte> actual;
-            actual = StringExtensions.UnprotectBinaryForUser(binaryData, salt);
+            actual = binaryData.UnprotectBinaryForUser(salt);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for UnprotectForMachine
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void UnprotectForMachineTest()
         {
-            IEnumerable<byte> binaryData = null; // TODO: Initialize to an appropriate value
-            string salt = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            IEnumerable<byte> binaryData = null;
+            string salt = string.Empty;
+            string expected = string.Empty;
             string actual;
-            actual = StringExtensions.UnprotectForMachine(binaryData, salt);
+            actual = binaryData.UnprotectForMachine(salt);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for UnprotectForUser
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void UnprotectForUserTest()
         {
-            IEnumerable<byte> binaryData = null; // TODO: Initialize to an appropriate value
-            string salt = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            IEnumerable<byte> binaryData = null;
+            string salt = string.Empty;
+            string expected = string.Empty;
             string actual;
-            actual = StringExtensions.UnprotectForUser(binaryData, salt);
+            actual = binaryData.UnprotectForUser(salt);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -637,40 +687,41 @@ namespace Test.CoApp.Toolkit.Extensions
         [TestMethod()]
         public void VersionStringToUInt64Test()
         {
-            string version = string.Empty; // TODO: Initialize to an appropriate value
-            ulong expected = 0; // TODO: Initialize to an appropriate value
+            string version = "255.255.255.255"; // Arbitrary version string
+            ulong expected = 71777214294589695; // Matching uint64
             ulong actual;
-            actual = StringExtensions.VersionStringToUInt64(version);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            actual = version.VersionStringToUInt64();
+            Assert.AreEqual(expected, actual, "Version "+version+"  --  Expected: "+expected+",  Actual: "+actual);
         }
 
         /// <summary>
         ///A test for format
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
-        public void formatTest()
+        public void FormatTest()
         {
-            string formatString = string.Empty; // TODO: Initialize to an appropriate value
-            object[] args = null; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            string formatString = string.Empty;
+            object[] args = null;
+            string expected = string.Empty;
             string actual;
-            actual = StringExtensions.format(formatString, args);
+            actual = formatString.format(args);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
         ///A test for oldIsWildcardMatch
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
-        public void oldIsWildcardMatchTest()
+        public void OldIsWildcardMatchTest()
         {
-            string text = string.Empty; // TODO: Initialize to an appropriate value
-            string wildcardMask = string.Empty; // TODO: Initialize to an appropriate value
-            bool expected = false; // TODO: Initialize to an appropriate value
+            string text = string.Empty;
+            string wildcardMask = string.Empty;
+            bool expected = false;
             bool actual;
-            actual = StringExtensions.oldIsWildcardMatch(text, wildcardMask);
+            actual = text.OldIsWildcardMatch(wildcardMask);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
