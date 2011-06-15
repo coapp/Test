@@ -223,11 +223,17 @@ namespace Test.CoApp.Toolkit.Extensions
         {
             // I am intentionally using the most obnoxious file name I can make for test string.
             const string text = @"C:\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt";
+            // A less obnoxious text string for comparing other tests against.
+            const string lessText = @"C:\adirectory\another\andanother\stuff!\filename.file";
             string wildcardMask = (string)testContextInstance.DataRow["STR"];
             bool expected = (int)testContextInstance.DataRow["Exists"]>0;
             bool actual;
-            actual = text.IsWildcardMatch(wildcardMask);
-            Assert.AreEqual(expected, actual, (string)testContextInstance.DataRow["Msg"]);
+            int pick = (int) testContextInstance.DataRow["UseText"];
+            if (pick == 0)
+                actual = text.IsWildcardMatch(wildcardMask);
+            else
+                actual = lessText.IsWildcardMatch(wildcardMask);
+            Assert.AreEqual(expected, actual, "String "+pick+": "+(string)testContextInstance.DataRow["Msg"]);
         }
 
         /// <summary>
