@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.IO;
+using System.Linq;
+using System.Text;
 using CoApp.Toolkit.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -18,9 +20,32 @@ namespace Test.CoApp.Toolkit.Extensions
     public class StringExtensionsTest
     {
 
+        private class InnerText : TextWriter
+        {
+            private Stream data;
+            private StreamWriter datWriter;
+            public InnerText()
+            {
+                data = new MemoryStream();
+                datWriter = new StreamWriter(data);
+            }
+            public override Encoding Encoding
+            {
+                get { return System.Console.Out.Encoding; }
+            }
+            public override void WriteLine(string format, params object[] arg)
+            {
+                datWriter.WriteLine(format, arg);
+            }
+            public override string ToString()
+            {
+                return new StreamReader(data).ReadToEnd();
+            }
+        }
 
         private TestContext testContextInstance;
         private static List<string> testStrings;
+        private static List<string> Files;
 
         /// <summary>
         ///Gets or sets the test context which provides
@@ -50,6 +75,10 @@ namespace Test.CoApp.Toolkit.Extensions
             StreamReader In = new StreamReader("..\\..\\..\\..\\Test\\CoApp\\Toolkit\\Extensions\\TestStrings.txt");
             //StreamReader In = new StreamReader("..\\Extensions\\TestStrings.txt");
             testStrings.AddRange(In.ReadToEnd().Split('\n'));
+            In.Close();
+            Files = new List<string>();
+            In = new StreamReader("..\\..\\..\\..\\Test\\CoApp\\Toolkit\\Extensions\\FileList.txt");
+            Files.AddRange(In.ReadToEnd().Split('\n'));
             In.Close();
         }
         //
@@ -120,36 +149,22 @@ namespace Test.CoApp.Toolkit.Extensions
         }
 
         /// <summary>
-        ///A test for Error
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void ErrorTest()
-        {
-            string formatString = string.Empty;
-            object[] args = null;
-            formatString.Error(args);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
-        }
-
-        /// <summary>
         ///A test for ExtendVersion
-        /// TR01: TODO: Need more info to write this test.
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\VersionStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\VersionStrings.csv", "VersionStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void ExtendVersionTest()
         {
-            string input = string.Empty;
-            string expected = string.Empty;
+            string input = (string)testContextInstance.DataRow["STR"];
+            string expected = (string)testContextInstance.DataRow["Padded"];
             string actual;
             actual = input.ExtendVersion();
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            if (expected.Equals(string.Empty))
+                Assert.IsNull(actual, "On input \""+input+"\":  Padding should have failed.  Actual: \""+actual+"\"");
+            Assert.AreEqual(expected, actual, "On input \"" + input + "\":  Expected \"" + expected + "\", Actual \"" + actual + "\"");
         }
 
         /// <summary>
         ///A test for Compress/Decompress
-        /// TR01: TODO: verify.
         ///</summary>
         [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\CompressStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\CompressStrings.csv", "CompressStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void CompressDecompressTest()
@@ -166,7 +181,6 @@ namespace Test.CoApp.Toolkit.Extensions
 
         /// <summary>
         ///A test for Compress64/Decompress64
-        /// TR01: TODO: verify.
         ///</summary>
         [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\CompressStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\CompressStrings.csv", "CompressStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void CompressDecompress64Test()
@@ -185,7 +199,7 @@ namespace Test.CoApp.Toolkit.Extensions
         ///A test for HasWildcardMatch
         /// TR01: TODO: Need more info to write this test.
         ///</summary>
-        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\ContainStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\ContainStrings.csv", "ContainStrings#csv", DataAccessMethod.Sequential), TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\HasWildCardStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\HasWildCardStrings.csv", "HasWildCardStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void HasWildcardMatchTest()
         {
             IEnumerable<string> source = testStrings;
@@ -198,6 +212,22 @@ namespace Test.CoApp.Toolkit.Extensions
             actual = source.HasWildcardMatch(value, ignorePrefix, escapePrefix);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
+        }
+
+        /// <summary>
+        ///A test for IsWildcardMatch
+        /// TR01: TODO: Need more info to write this test.
+        ///</summary>
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\IsWildStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\IsWildStrings.csv", "IsWildStrings#csv", DataAccessMethod.Sequential), TestMethod()]
+        public void IsWildcardMatchTest()
+        {
+            // I am intentionally using the most obnoxious file name I can make for test string.
+            const string text = @"C:\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt";
+            string wildcardMask = (string)testContextInstance.DataRow["STR"];
+            bool expected = (int)testContextInstance.DataRow["Exists"]>0;
+            bool actual;
+            actual = text.IsWildcardMatch(wildcardMask);
+            Assert.AreEqual(expected, actual, (string)testContextInstance.DataRow["Msg"]);
         }
 
         /// <summary>
@@ -249,7 +279,6 @@ namespace Test.CoApp.Toolkit.Extensions
 
         /// <summary>
         ///A test for IsValidMajorMinorVersion
-        /// TR01: TODO: Verify correct testing.
         ///</summary>
         [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\VersionStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\VersionStrings.csv", "VersionStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void IsValidMajorMinorVersionTest()
@@ -265,11 +294,12 @@ namespace Test.CoApp.Toolkit.Extensions
 
         /// <summary>
         ///A test for IsValidVersion
-        /// TR01: TODO: Verify correct testing.
         ///</summary>
         [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\VersionStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\VersionStrings.csv", "VersionStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void IsValidVersionTest()
         {
+            // ReSharper disable ConditionIsAlwaysTrueOrFalse
+
             string input = (string) testContextInstance.DataRow["STR"];
             bool general = false;
             bool strict = false;
@@ -284,6 +314,7 @@ namespace Test.CoApp.Toolkit.Extensions
                     strict = true;
                     expected = true;
                     actual = input.IsValidVersion(strict);
+
                     Assert.AreEqual(expected, actual, "On input \""+input+"\": Is strict-compliant, failed strict test.");
                 }
                 strict = false;
@@ -299,7 +330,7 @@ namespace Test.CoApp.Toolkit.Extensions
                 actual = input.IsValidVersion(strict);
                 Assert.AreEqual(expected, actual, "On input\""+input+"\": non-compliant string was accepted as valid under strict.");
             }
-
+            // ReSharper restore ConditionIsAlwaysTrueOrFalse
         }
 
         /// <summary>
@@ -313,24 +344,6 @@ namespace Test.CoApp.Toolkit.Extensions
             bool expected = false;
             bool actual;
             actual = input.IsValidVersionPart();
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for IsWildcardMatch
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void IsWildcardMatchTest()
-        {
-            string text = string.Empty;
-            string wildcardMask = string.Empty;
-            string ignorePrefix = string.Empty;
-            bool escapePrefix = false;
-            bool expected = false;
-            bool actual;
-            actual = text.IsWildcardMatch(wildcardMask, ignorePrefix, escapePrefix);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
@@ -383,6 +396,7 @@ namespace Test.CoApp.Toolkit.Extensions
 
         /// <summary>
         ///A test for MatchIgnoreCase
+        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void MatchIgnoreCaseTest()
@@ -461,80 +475,63 @@ namespace Test.CoApp.Toolkit.Extensions
         }
 
         /// <summary>
-        ///A test for Print
-        /// TR01: TODO: Need more info to write this test.
+        ///A test for ProtectBinaryForMachine/UnprotectBinaryForMachine
         ///</summary>
-        [TestMethod()]
-        public void PrintTest()
-        {
-            string formatString = string.Empty; 
-            object[] args = null; 
-            formatString.Print(args);
-            Assert.Inconclusive("A method that does not return a value cannot be verified.");
-        }
-
-        /// <summary>
-        ///A test for ProtectBinaryForMachine
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\CompressStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\CompressStrings.csv", "CompressStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void ProtectBinaryForMachineTest()
         {
-            IEnumerable<byte> binaryData = null;
-            string salt = string.Empty;
-            IEnumerable<byte> expected = null;
-            IEnumerable<byte> actual;
-            actual = binaryData.ProtectBinaryForMachine(salt);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            IEnumerable<byte> input = ((string)testContextInstance.DataRow["STR"]).ToByteArray();
+            IEnumerable<byte> protectedData;
+            protectedData = input.ProtectBinaryForMachine();
+
+            IEnumerable<byte> output;
+            output = protectedData.UnprotectBinaryForMachine();
+            Assert.AreEqual(input, output, "Protect/Unprotect round trip failed.");
         }
 
         /// <summary>
-        ///A test for ProtectBinaryForUser
-        /// TR01: TODO: Need more info to write this test.
+        ///A test for ProtectBinaryForUser/UnprotectBinaryForUser
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\CompressStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\CompressStrings.csv", "CompressStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void ProtectBinaryForUserTest()
         {
-            IEnumerable<byte> binaryData = null;
-            string salt = string.Empty;
-            IEnumerable<byte> expected = null;
-            IEnumerable<byte> actual;
-            actual = binaryData.ProtectBinaryForUser(salt);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            IEnumerable<byte> input = ((string)testContextInstance.DataRow["STR"]).ToByteArray();
+            IEnumerable<byte> protectedData;
+            protectedData = input.ProtectBinaryForUser();
+            
+            IEnumerable<byte> output;
+            output = protectedData.UnprotectBinaryForUser();
+            Assert.AreEqual(input, output, "Protect/Unprotect round trip failed.");
         }
 
         /// <summary>
-        ///A test for ProtectForMachine
-        /// TR01: TODO: Need more info to write this test.
+        ///A test for ProtectForMachine/UnprotectForMachine
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\CompressStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\CompressStrings.csv", "CompressStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void ProtectForMachineTest()
         {
-            string text = string.Empty;
-            string salt = string.Empty;
-            IEnumerable<byte> expected = null;
-            IEnumerable<byte> actual;
-            actual = text.ProtectForMachine(salt);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            string input = (string)testContextInstance.DataRow["STR"];
+            IEnumerable<byte> protectedData;
+            protectedData = input.ProtectForMachine();
+
+            string output;
+            output = protectedData.UnprotectForMachine();
+            Assert.AreEqual(input, output, "Protect/Unprotect round trip failed.");
         }
 
         /// <summary>
-        ///A test for ProtectForUser
-        /// TR01: TODO: Need more info to write this test.
+        ///A test for ProtectForUser/UnprotectForUser
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\CompressStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\CompressStrings.csv", "CompressStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void ProtectForUserTest()
         {
-            string text = string.Empty;
-            string salt = string.Empty;
-            IEnumerable<byte> expected = null;
-            IEnumerable<byte> actual;
-            actual = text.ProtectForUser(salt);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            string input = (string)testContextInstance.DataRow["STR"];
+            IEnumerable<byte> protectedData;
+            protectedData = input.ProtectForUser();
+
+            string output;
+            output = protectedData.UnprotectForUser();
+            Assert.AreEqual(input, output, "Protect/Unprotect round trip failed.");
         }
 
         /// <summary>
@@ -618,70 +615,6 @@ namespace Test.CoApp.Toolkit.Extensions
         }
 
         /// <summary>
-        ///A test for UnprotectBinaryForMachine
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void UnprotectBinaryForMachineTest()
-        {
-            IEnumerable<byte> binaryData = null;
-            string salt = string.Empty;
-            IEnumerable<byte> expected = null;
-            IEnumerable<byte> actual;
-            actual = binaryData.UnprotectBinaryForMachine(salt);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for UnprotectBinaryForUser
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void UnprotectBinaryForUserTest()
-        {
-            IEnumerable<byte> binaryData = null;
-            string salt = string.Empty;
-            IEnumerable<byte> expected = null;
-            IEnumerable<byte> actual;
-            actual = binaryData.UnprotectBinaryForUser(salt);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for UnprotectForMachine
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void UnprotectForMachineTest()
-        {
-            IEnumerable<byte> binaryData = null;
-            string salt = string.Empty;
-            string expected = string.Empty;
-            string actual;
-            actual = binaryData.UnprotectForMachine(salt);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for UnprotectForUser
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void UnprotectForUserTest()
-        {
-            IEnumerable<byte> binaryData = null;
-            string salt = string.Empty;
-            string expected = string.Empty;
-            string actual;
-            actual = binaryData.UnprotectForUser(salt);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
         ///A test for VersionStringToUInt64
         ///</summary>
         [TestMethod()]
@@ -694,36 +627,5 @@ namespace Test.CoApp.Toolkit.Extensions
             Assert.AreEqual(expected, actual, "Version "+version+"  --  Expected: "+expected+",  Actual: "+actual);
         }
 
-        /// <summary>
-        ///A test for format
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void FormatTest()
-        {
-            string formatString = string.Empty;
-            object[] args = null;
-            string expected = string.Empty;
-            string actual;
-            actual = formatString.format(args);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for oldIsWildcardMatch
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void OldIsWildcardMatchTest()
-        {
-            string text = string.Empty;
-            string wildcardMask = string.Empty;
-            bool expected = false;
-            bool actual;
-            actual = text.OldIsWildcardMatch(wildcardMask);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
     }
 }
