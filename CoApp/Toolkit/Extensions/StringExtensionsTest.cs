@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.IO;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using CoApp.Toolkit.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -19,30 +16,6 @@ namespace Test.CoApp.Toolkit.Extensions
     [TestClass()]
     public class StringExtensionsTest
     {
-
-        private class InnerText : TextWriter
-        {
-            private Stream data;
-            private StreamWriter datWriter;
-            public InnerText()
-            {
-                data = new MemoryStream();
-                datWriter = new StreamWriter(data);
-            }
-            public override Encoding Encoding
-            {
-                get { return System.Console.Out.Encoding; }
-            }
-            public override void WriteLine(string format, params object[] arg)
-            {
-                datWriter.WriteLine(format, arg);
-            }
-            public override string ToString()
-            {
-                return new StreamReader(data).ReadToEnd();
-            }
-        }
-
         private TestContext testContextInstance;
         private static List<string> testStrings;
         private static List<string> Files;
@@ -72,14 +45,9 @@ namespace Test.CoApp.Toolkit.Extensions
         public static void MyClassInitialize(TestContext testContext)
         {
             testStrings = new List<string>();
-            StreamReader In = new StreamReader("..\\..\\..\\..\\Test\\CoApp\\Toolkit\\Extensions\\TestStrings.txt");
-            //StreamReader In = new StreamReader("..\\Extensions\\TestStrings.txt");
-            testStrings.AddRange(In.ReadToEnd().Split('\n'));
-            In.Close();
+            testStrings.AddRange(File.ReadLines("..\\..\\..\\..\\Test\\CoApp\\Toolkit\\Extensions\\TestStrings.txt"));
             Files = new List<string>();
-            In = new StreamReader("..\\..\\..\\..\\Test\\CoApp\\Toolkit\\Extensions\\FileList.txt");
-            Files.AddRange(In.ReadToEnd().Split('\n'));
-            In.Close();
+            Files.AddRange(File.ReadLines("..\\..\\..\\..\\Test\\CoApp\\Toolkit\\Extensions\\FileList.txt"));
         }
         //
         //Use ClassCleanup to run code after all tests in a class have run
@@ -120,32 +88,20 @@ namespace Test.CoApp.Toolkit.Extensions
         }
 
         /// <summary>
-        ///A test for CreateGuid
-        /// TR01: TODO: Confirm this test.
-        ///</summary>
-        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\GuidStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\GuidStrings.csv", "GUIDStrings#csv", DataAccessMethod.Sequential), TestMethod()]
-        public void CreateGuidTest()
-        {
-            string str = (string)testContextInstance.DataRow["STR"];
-            string expected = (string)testContextInstance.DataRow["GUID"];
-            Guid actual;
-            actual = str.CreateGuid();
-            Assert.IsTrue(expected.Equals(actual.ToString()), "GUID did not match.  Expected: "+expected+", Actual: "+actual);
-        }
-
-        /// <summary>
         ///A test for CreatePublicKeyToken
         /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [TestMethod()]
         public void CreatePublicKeyTokenTest()
         {
+            /*
             string publicKey = string.Empty;
             string expected = string.Empty;
             string actual;
             actual = publicKey.CreatePublicKeyToken();
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            */
+            Assert.Inconclusive("Unable to implement at this time.");
         }
 
         /// <summary>
@@ -155,12 +111,13 @@ namespace Test.CoApp.Toolkit.Extensions
         public void ExtendVersionTest()
         {
             string input = (string)testContextInstance.DataRow["STR"];
-            string expected = (string)testContextInstance.DataRow["Padded"];
+            string expected = testContextInstance.DataRow["Padded"].ToString();
             string actual;
             actual = input.ExtendVersion();
-            if (expected.Equals(string.Empty))
+            if (expected.IsNullOrEmpty())
                 Assert.IsNull(actual, "On input \""+input+"\":  Padding should have failed.  Actual: \""+actual+"\"");
-            Assert.AreEqual(expected, actual, "On input \"" + input + "\":  Expected \"" + expected + "\", Actual \"" + actual + "\"");
+            else
+                Assert.AreEqual(expected, actual, "On input \"" + input + "\":  Expected \"" + expected + "\", Actual \"" + actual + "\"");
         }
 
         /// <summary>
@@ -197,11 +154,12 @@ namespace Test.CoApp.Toolkit.Extensions
 
         /// <summary>
         ///A test for HasWildcardMatch
-        /// TR01: TODO: Need more info to write this test.
+        /// TR01: TODO: Need to write this test.
         ///</summary>
         [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\HasWildCardStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\HasWildCardStrings.csv", "HasWildCardStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void HasWildcardMatchTest()
         {
+            /*
             IEnumerable<string> source = testStrings;
             string value = (string)testContextInstance.DataRow["STR"];
             ///////////////
@@ -211,12 +169,12 @@ namespace Test.CoApp.Toolkit.Extensions
             bool actual;
             actual = source.HasWildcardMatch(value, ignorePrefix, escapePrefix);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            */
+            Assert.Inconclusive("Test not presently implemented.");
         }
 
         /// <summary>
         ///A test for IsWildcardMatch
-        /// TR01: TODO: Need more info to write this test.
         ///</summary>
         [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\IsWildStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\IsWildStrings.csv", "IsWildStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void IsWildcardMatchTest()
@@ -341,143 +299,75 @@ namespace Test.CoApp.Toolkit.Extensions
 
         /// <summary>
         ///A test for IsValidVersionPart
-        /// TR01: TODO: Need more info to write this test.
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\VersionPartStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\VersionPartStrings.csv", "VersionPartStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void IsValidVersionPartTest()
         {
-            string input = string.Empty;
-            bool expected = false;
+            string input = (string)testContextInstance.DataRow["STR"];
+            bool expected = (int)testContextInstance.DataRow["Valid"] > 0;
             bool actual;
             actual = input.IsValidVersionPart();
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            Assert.AreEqual(expected, actual, "Failed on input \""+input+"\"");
         }
 
+/*  TR01:  TODO: Not doing this right now...
         /// <summary>
         ///A test for MD5Hash
-        /// TR01: TODO: Need more info to write this test.
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\CompressStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\CompressStrings.csv", "CompressStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void MD5HashTest()
         {
-            string input = string.Empty; // TODO: Initialize to an appropriate value
-            string expected = string.Empty; // TODO: Initialize to an appropriate value
+            string input = (string) testContextInstance.DataRow["STR"];
+            string expected = (string) testContextInstance.DataRow["MD5"];
             string actual;
             actual = input.MD5Hash();
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
-
+*/
         /// <summary>
         ///A test for MakeSafeDirectoryId
-        /// TR01: TODO: Need more info to write this test.
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\DirStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\DirStrings.csv", "DirStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void MakeSafeDirectoryIdTest()
         {
-            string input = string.Empty;
-            string expected = string.Empty;
+            string input = (string)testContextInstance.DataRow["STR"];
+            string expected = (string)testContextInstance.DataRow["Safe"];
             string actual;
             actual = input.MakeSafeDirectoryId();
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for Match
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void MatchTest()
-        {
-            string input = string.Empty;
-            string rxExpression = string.Empty;
-            Match expected = null;
-            Match actual;
-            actual = input.Match(rxExpression);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for MatchIgnoreCase
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void MatchIgnoreCaseTest()
-        {
-            string input = string.Empty; // TODO: Initialize to an appropriate value
-            string rxExpression = string.Empty; // TODO: Initialize to an appropriate value
-            Match expected = null; // TODO: Initialize to an appropriate value
-            Match actual;
-            actual = input.MatchIgnoreCase(rxExpression);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            Assert.AreEqual(expected, actual, "Failed on input \""+input+"\"");
         }
 
         /// <summary>
         ///A test for OnlyContains
-        /// TR01: TODO: Need more info to write this test.
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\CharStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\CharStrings.csv", "CharStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void OnlyContainsTest()
         {
-            string str = string.Empty;
-            string characters = string.Empty;
-            bool expected = false;
+            string str = "This is a test string. It is only a test string. Please use other strings for tying knots.";
+            string characters = (string)testContextInstance.DataRow["STR"];
+            bool expected = (int)testContextInstance.DataRow["Present"] > 0;
             bool actual;
             actual = str.OnlyContains(characters);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for OnlyContains
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void OnlyContainsTest1()
-        {
-            string str = string.Empty;
-            char[] characters = null;
-            bool expected = false;
-            bool actual;
-            actual = str.OnlyContains(characters);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
+            Assert.AreEqual(expected, actual, "Failed unexpectedly on test string for characters: "+characters);
         }
 
         /// <summary>
         ///A test for PositionOfFirstCharacterNotIn
-        /// TR01: TODO: Need more info to write this test.
+        /// missing doc from method:
+        ///     Iterates through the character array (or string) parameter.
+        ///     Will return the first index of the calling string which contains a character (Case-Sensitive!) not present in the parameter.
+        ///     If the end of the calling string is reached, will return the length of the calling string.
         ///</summary>
-        [TestMethod()]
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\CharStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\CharStrings.csv", "CharStrings#csv", DataAccessMethod.Sequential), TestMethod()]
         public void PositionOfFirstCharacterNotInTest()
         {
-            string str = string.Empty; // TODO: Initialize to an appropriate value
-            string characters = string.Empty; // TODO: Initialize to an appropriate value
-            int expected = 0; // TODO: Initialize to an appropriate value
+            
+            string str = "This is a test string. It is only a test string. Please use other strings for tying knots.";
+            string characters = (string)testContextInstance.DataRow["STR"];
+            int expected = (int)testContextInstance.DataRow["FirstNon"];
             int actual;
             actual = str.PositionOfFirstCharacterNotIn(characters);
             Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        /// <summary>
-        ///A test for PositionOfFirstCharacterNotIn
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void PositionOfFirstCharacterNotInTest1()
-        {
-            string str = string.Empty;
-            char[] characters = null;
-            int expected = 0;
-            int actual;
-            actual = str.PositionOfFirstCharacterNotIn(characters);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>
@@ -492,7 +382,7 @@ namespace Test.CoApp.Toolkit.Extensions
 
             IEnumerable<byte> output;
             output = protectedData.UnprotectBinaryForMachine();
-            Assert.AreEqual(input, output, "Protect/Unprotect round trip failed.");
+            Assert.AreEqual(input.ToString(), output.ToString(), "Protect/Unprotect round trip failed.");
         }
 
         /// <summary>
@@ -507,7 +397,7 @@ namespace Test.CoApp.Toolkit.Extensions
             
             IEnumerable<byte> output;
             output = protectedData.UnprotectBinaryForUser();
-            Assert.AreEqual(input, output, "Protect/Unprotect round trip failed.");
+            Assert.AreEqual(input.ToString(), output.ToString(), "Protect/Unprotect round trip failed.");
         }
 
         /// <summary>
@@ -590,21 +480,6 @@ namespace Test.CoApp.Toolkit.Extensions
             int actual;
             actual = str.ToInt32();
             Assert.AreEqual(expected, actual, "String \"" + str + "\"  --  Expected: " + expected + "  Actual: " + actual);
-        }
-
-        /// <summary>
-        ///A test for ToUtf8String
-        /// TR01: TODO: Need more info to write this test.
-        ///</summary>
-        [TestMethod()]
-        public void ToUtf8StringTest()
-        {
-            IEnumerable<byte> bytes = null;
-            string expected = string.Empty;
-            string actual;
-            actual = bytes.ToUtf8String();
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
         }
 
         /// <summary>

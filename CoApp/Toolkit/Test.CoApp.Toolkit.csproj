@@ -212,16 +212,19 @@
     <Shadow Include="Test References\CoApp.Toolkit.accessor" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Extensions\CharStrings.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Extensions\CompressStrings.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Extensions\ContainStrings.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Extensions\EmailStrings.csv">
+    <None Include="Extensions\DirStrings.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="Extensions\GuidStrings.csv">
+    <None Include="Extensions\EmailStrings.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Extensions\HasWildCardStrings.csv" />
@@ -232,6 +235,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Extensions\TrueFalseStrings.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Extensions\VersionPartStrings.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Extensions\VersionStrings.csv">
