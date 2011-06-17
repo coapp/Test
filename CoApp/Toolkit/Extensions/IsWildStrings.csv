@@ -511,16 +511,16 @@ STR,Exists,Msg,UseText,UseIgnore,Ignore,Escape
 "**\adirectory\another\and**\stuff!\fileNOTname.fil?",0,"Full path, NotExists, **-begin, **-center, ?-end",1,0,"",1
 "**\adirectory\another\and**\stuff!\fileNOTname.*",0,"Full path, NotExists, **-begin, **-center, *-end",1,0,"",1
 "**\adirectory\another\and**\stuff!\fileNOTname.**",0,"Full path, NotExists, **-begin, **-center, **-end",1,0,"",1
-"C:\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, ?-end",0,0,"",1
+"C:\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, ?-end",0,0,"",1
 "C:\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, *-end",0,0,"",1
-"C:\CoApp\Test\CoApp\Toolkit\Extensions\*",0,"Partial Path - Front, Exists, *-end --2",0,0,"",1
+"C:\CoApp\Test\CoApp\Toolkit\Extensions\*",0,"Partial Path - Front, NotExists, *-end --2",0,0,"",1
 "C:\CoApp\Test\CoApp\Toolkit\Extensions\**",1,"Partial Path - Front, Exists, **-end",0,0,"",1
-"?:\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\",0,"Partial Path - Front, Exists, ?-begin",0,0,"",1
-"*\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\",0,"Partial Path - Front, Exists, *-begin",0,0,"",1
-"**\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\",0,"Partial Path - Front, Exists, **-begin",0,0,"",1
-"?:\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, ?-begin, ?-end",0,0,"",1
+"?:\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\",0,"Partial Path - Front, NotExists, ?-begin",0,0,"",1
+"*\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\",0,"Partial Path - Front, NotExists, *-begin",0,0,"",1
+"**\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\",0,"Partial Path - Front, NotExists, **-begin",0,0,"",1
+"?:\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, ?-begin, ?-end",0,0,"",1
 "?:\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, ?-begin, *-end",0,0,"",1
-"?:\CoApp\Test\CoApp\Toolkit\Extensions\*",0,"Partial Path - Front, Exists, ?-begin, *-end --2",0,0,"",1
+"?:\CoApp\Test\CoApp\Toolkit\Extensions\*",0,"Partial Path - Front, NotExists, ?-begin, *-end --2",0,0,"",1
 "?:\CoApp\Test\CoApp\Toolkit\Extensions\**",1,"Partial Path - Front, Exists, ?-begin, **-end",0,0,"",1
 "*\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\?",1,"Partial Path - Front, Exists, *-begin, ?-end",0,0,"",1
 "*\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, *-begin, *-end",0,0,"",1
@@ -532,83 +532,83 @@ STR,Exists,Msg,UseText,UseIgnore,Ignore,Escape
 "**\CoApp\Test\CoApp\Toolkit\Extensions\**",1,"Partial Path - Front, Exists, **-begin, **-end",0,0,"",1
 "C:\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\",1,"Partial Path - Front, Exists, ?-center",0,0,"",1
 "C:\CoApp\Test\CoApp\*\Extensions\StringExtensionsTest\",1,"Partial Path - Front, Exists, *-center",0,0,"",1
-"C:\CoApp\Test\CoApp\*\StringExtensionsTest\",0,"Partial Path - Front, Exists, *-center --2",0,0,"",1
+"C:\CoApp\Test\CoApp\*\StringExtensionsTest\",0,"Partial Path - Front, NotExists, *-center --2",0,0,"",1
 "C:\CoApp\Test\CoApp\**\StringExtensionsTest\",1,"Partial Path - Front, Exists, **-center",0,0,"",1
 "?:\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\",1,"Partial Path - Front, Exists, ?-begin, ?-center",0,0,"",1
 "?:\CoApp\Test\CoApp\*\Extensions\StringExtensionsTest\",1,"Partial Path - Front, Exists, ?-begin, *-center",0,0,"",1
-"?:\CoApp\Test\CoApp\*\StringExtensionsTest\",0,"Partial Path - Front, Exists, ?-begin, *-center --2",0,0,"",1
+"?:\CoApp\Test\CoApp\*\StringExtensionsTest\",0,"Partial Path - Front, NotExists, ?-begin, *-center --2",0,0,"",1
 "?:\CoApp\Test\CoApp\**\StringExtensionsTest\",1,"Partial Path - Front, Exists, ?-begin, **-center",0,0,"",1
 "*\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\",1,"Partial Path - Front, Exists, *-begin, ?-center",0,0,"",1
 "*\CoApp\Test\CoApp\*\Extensions\StringExtensionsTest\",1,"Partial Path - Front, Exists, *-begin, *-center",0,0,"",1
-"*\CoApp\Test\CoApp\*\StringExtensionsTest\",0,"Partial Path - Front, Exists, *-begin, *-center --2",0,0,"",1
+"*\CoApp\Test\CoApp\*\StringExtensionsTest\",0,"Partial Path - Front, NotExists, *-begin, *-center --2",0,0,"",1
 "*\CoApp\Test\CoApp\**\StringExtensionsTest\",1,"Partial Path - Front, Exists, *-begin, **-center",0,0,"",1
 "**\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\",1,"Partial Path - Front, Exists, **-begin, ?-center",0,0,"",1
 "**\CoApp\Test\CoApp\*\Extensions\StringExtensionsTest\",1,"Partial Path - Front, Exists, **-begin, *-center",0,0,"",1
-"**\CoApp\Test\CoApp\*\StringExtensionsTest\",0,"Partial Path - Front, Exists, **-begin, *-center --2",0,0,"",1
+"**\CoApp\Test\CoApp\*\StringExtensionsTest\",0,"Partial Path - Front, NotExists, **-begin, *-center --2",0,0,"",1
 "**\CoApp\Test\CoApp\**\StringExtensionsTest\",1,"Partial Path - Front, Exists, **-begin, **-center",0,0,"",1
-"C:\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, ?-center, ?-end",0,0,"",1
+"C:\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, ?-center, ?-end",0,0,"",1
 "C:\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, ?-center, *-end",0,0,"",1
-"C:\CoApp\Test\CoApp\Toolk?t\Extensions\*",0,"Partial Path - Front, Exists, ?-center, *-end",0,0,"",1
+"C:\CoApp\Test\CoApp\Toolk?t\Extensions\*",0,"Partial Path - Front, NotExists, ?-center, *-end",0,0,"",1
 "C:\CoApp\Test\CoApp\Toolk?t\Extensions\**",1,"Partial Path - Front, Exists, ?-center, **-end",0,0,"",1
-"C:\CoApp\Test\CoApp\*\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, *-center, ?-end",0,0,"",1
-"C:\CoApp\Test\CoApp\*\StringExtensionsTest\?",0,"Partial Path - Front, Exists, *-center --2, ?-end",0,0,"",1
+"C:\CoApp\Test\CoApp\*\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, *-center, ?-end",0,0,"",1
+"C:\CoApp\Test\CoApp\*\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, *-center --2, ?-end",0,0,"",1
 "C:\CoApp\Test\CoApp\*\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, *-center, *-end",0,0,"",1
-"C:\CoApp\Test\CoApp\*\Extensions\*",0,"Partial Path - Front, Exists, *-center, *-end --2",0,0,"",1
-"C:\CoApp\Test\CoApp\*\StringExtensionsTest\*",0,"Partial Path - Front, Exists, *-center --2, *-end",0,0,"",1
-"C:\CoApp\Test\*\Toolkit\*",0,"Partial Path - Front, Exists, *-center --2, *-end --2",0,0,"",1
+"C:\CoApp\Test\CoApp\*\Extensions\*",0,"Partial Path - Front, NotExists, *-center, *-end --2",0,0,"",1
+"C:\CoApp\Test\CoApp\*\StringExtensionsTest\*",0,"Partial Path - Front, NotExists, *-center --2, *-end",0,0,"",1
+"C:\CoApp\Test\*\Toolkit\*",0,"Partial Path - Front, NotExists, *-center --2, *-end --2",0,0,"",1
 "C:\CoApp\Test\CoApp\*\Extensions\**",1,"Partial Path - Front, Exists, *-center, **-end",0,0,"",1
-"C:\CoApp\Test\*\Extensions\**",0,"Partial Path - Front, Exists, *-center, **-end",0,0,"",1
-"C:\CoApp\Test\CoApp\**\StringExtensionsTest\?",0,"Partial Path - Front, Exists, **-center, ?-end",0,0,"",1
+"C:\CoApp\Test\*\Extensions\**",0,"Partial Path - Front, NotExists, *-center, **-end",0,0,"",1
+"C:\CoApp\Test\CoApp\**\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, **-center, ?-end",0,0,"",1
 "C:\CoApp\Test\CoApp\**\StringExtensionsTest\*",1,"Partial Path - Front, Exists, **-center, *-end",0,0,"",1
-"C:\CoApp\Test\**\Extensions\*",0,"Partial Path - Front, Exists, **-center, *-end --2",0,0,"",1
+"C:\CoApp\Test\**\Extensions\*",0,"Partial Path - Front, NotExists, **-center, *-end --2",0,0,"",1
 "C:\CoApp\Test\**\Extensions\**",1,"Partial Path - Front, Exists, **-center, **-end",0,0,"",1
-"?:\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, ?-begin, ?-center, ?-end",0,0,"",1
+"?:\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, ?-begin, ?-center, ?-end",0,0,"",1
 "?:\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, ?-begin, ?-center, *-end",0,0,"",1
-"?:\CoApp\Test\CoApp\Toolk?t\Extensions\*",0,"Partial Path - Front, Exists, ?-begin, ?-center, *-end --2",0,0,"",1
+"?:\CoApp\Test\CoApp\Toolk?t\Extensions\*",0,"Partial Path - Front, NotExists, ?-begin, ?-center, *-end --2",0,0,"",1
 "?:\CoApp\Test\CoApp\Toolk?t\Extensions\**",1,"Partial Path - Front, Exists, ?-begin, ?-center, **-end",0,0,"",1
-"?:\CoApp\Test\CoApp\*\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, ?-begin, *-center, ?-end",0,0,"",1
-"?:\CoApp\Test\*\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, ?-begin, *-center --2, ?-end",0,0,"",1
+"?:\CoApp\Test\CoApp\*\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, ?-begin, *-center, ?-end",0,0,"",1
+"?:\CoApp\Test\*\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, ?-begin, *-center --2, ?-end",0,0,"",1
 "?:\CoApp\Test\*\Toolkit\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, ?-begin, *-center, *-end",0,0,"",1
-"?:\CoApp\Test\*\Toolkit\Extensions\*",0,"Partial Path - Front, Exists, ?-begin, *-center, *-end --2",0,0,"",1
-"?:\CoApp\Test\*\Extensions\StringExtensionsTest\*",0,"Partial Path - Front, Exists, ?-begin, *-center --2, *-end",0,0,"",1
-"?:\CoApp\Test\*\Extensions\*",0,"Partial Path - Front, Exists, ?-begin, *-center --2, *-end --2",0,0,"",1
+"?:\CoApp\Test\*\Toolkit\Extensions\*",0,"Partial Path - Front, NotExists, ?-begin, *-center, *-end --2",0,0,"",1
+"?:\CoApp\Test\*\Extensions\StringExtensionsTest\*",0,"Partial Path - Front, NotExists, ?-begin, *-center --2, *-end",0,0,"",1
+"?:\CoApp\Test\*\Extensions\*",0,"Partial Path - Front, NotExists, ?-begin, *-center --2, *-end --2",0,0,"",1
 "?:\CoApp\Test\*\Toolkit\Extensions\**",1,"Partial Path - Front, Exists, ?-begin, *-center, **-end",0,0,"",1
-"?:\CoApp\Test\*\Extensions\**",0,"Partial Path - Front, Exists, ?-begin, *-center --2, **-end",0,0,"",1
-"?:\CoApp\Test\**\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, ?-begin, **-center, ?-end",0,0,"",1
+"?:\CoApp\Test\*\Extensions\**",0,"Partial Path - Front, NotExists, ?-begin, *-center --2, **-end",0,0,"",1
+"?:\CoApp\Test\**\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, ?-begin, **-center, ?-end",0,0,"",1
 "?:\CoApp\Test\**\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, ?-begin, **-center, *-end",0,0,"",1
-"?:\CoApp\Test\**\Extensions\*",0,"Partial Path - Front, Exists, ?-begin, **-center, *-end",0,0,"",1
+"?:\CoApp\Test\**\Extensions\*",0,"Partial Path - Front, NotExists, ?-begin, **-center, *-end",0,0,"",1
 "?:\CoApp\Test\**\Extensions\**",1,"Partial Path - Front, Exists, ?-begin, **-center, **-end",0,0,"",1
-"*\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, *-begin, ?-center, ?-end",0,0,"",1
+"*\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, *-begin, ?-center, ?-end",0,0,"",1
 "*\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, *-begin, ?-center, *-end",0,0,"",1
-"*\CoApp\Test\CoApp\Toolk?t\Extensions\*",0,"Partial Path - Front, Exists, *-begin, ?-center, *-end --2",0,0,"",1
+"*\CoApp\Test\CoApp\Toolk?t\Extensions\*",0,"Partial Path - Front, NotExists, *-begin, ?-center, *-end --2",0,0,"",1
 "*\CoApp\Test\CoApp\Toolk?t\Extensions\**",1,"Partial Path - Front, Exists, *-begin, ?-center, **-end",0,0,"",1
-"*\CoApp\Test\*\Toolkit\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, *-begin, *-center, ?-end",0,0,"",1
-"*\CoApp\Test\*\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, *-begin, *-center --2, ?-end",0,0,"",1
+"*\CoApp\Test\*\Toolkit\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, *-begin, *-center, ?-end",0,0,"",1
+"*\CoApp\Test\*\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, *-begin, *-center --2, ?-end",0,0,"",1
 "*\CoApp\Test\*\Toolkit\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, *-begin, *-center, *-end",0,0,"",1
-"*\CoApp\Test\*\Toolkit\Extensions\*",0,"Partial Path - Front, Exists, *-begin, *-center, *-end --2",0,0,"",1
-"*\CoApp\Test\*\Extensions\StringExtensionsTest\*",0,"Partial Path - Front, Exists, *-begin, *-center --2, *-end",0,0,"",1
-"*\CoApp\Test\*\Extensions\*",0,"Partial Path - Front, Exists, *-begin, *-center --2, *-end --2",0,0,"",1
+"*\CoApp\Test\*\Toolkit\Extensions\*",0,"Partial Path - Front, NotExists, *-begin, *-center, *-end --2",0,0,"",1
+"*\CoApp\Test\*\Extensions\StringExtensionsTest\*",0,"Partial Path - Front, NotExists, *-begin, *-center --2, *-end",0,0,"",1
+"*\CoApp\Test\*\Extensions\*",0,"Partial Path - Front, NotExists, *-begin, *-center --2, *-end --2",0,0,"",1
 "*\CoApp\Test\*\Toolkit\Extensions\**",1,"Partial Path - Front, Exists, *-begin, *-center, **-end",0,0,"",1
-"*\CoApp\Test\*\Extensions\**",0,"Partial Path - Front, Exists, *-begin, *-center --2, **-end",0,0,"",1
-"*\CoApp\Test\**\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, *-begin, **-center, ?-end",0,0,"",1
+"*\CoApp\Test\*\Extensions\**",0,"Partial Path - Front, NotExists, *-begin, *-center --2, **-end",0,0,"",1
+"*\CoApp\Test\**\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, *-begin, **-center, ?-end",0,0,"",1
 "*\CoApp\Test\**\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, *-begin, **-center, *-end",0,0,"",1
-"*\CoApp\Test\**\Extensions\*",0,"Partial Path - Front, Exists, *-begin, **-center, *-end --2",0,0,"",1
+"*\CoApp\Test\**\Extensions\*",0,"Partial Path - Front, NotExists, *-begin, **-center, *-end --2",0,0,"",1
 "*\CoApp\Test\**\Extensions\**",1,"Partial Path - Front, Exists, *-begin, **-center, **-end",0,0,"",1
-"**\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, **-begin, ?-center, ?-end",0,0,"",1
+"**\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, **-begin, ?-center, ?-end",0,0,"",1
 "**\CoApp\Test\CoApp\Toolk?t\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, **-begin, ?-center, *-end",0,0,"",1
-"**\CoApp\Test\CoApp\Toolk?t\Extensions\*",0,"Partial Path - Front, Exists, **-begin, ?-center, *-end --2",0,0,"",1
+"**\CoApp\Test\CoApp\Toolk?t\Extensions\*",0,"Partial Path - Front, NotExists, **-begin, ?-center, *-end --2",0,0,"",1
 "**\CoApp\Test\CoApp\Toolk?t\Extensions\**",1,"Partial Path - Front, Exists, **-begin, ?-center, **-end",0,0,"",1
-"**\CoApp\Test\*\Toolkit\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, **-begin, *-center, ?-end",0,0,"",1
-"**\CoApp\Test\*\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, **-begin, *-center --2, ?-end",0,0,"",1
+"**\CoApp\Test\*\Toolkit\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, **-begin, *-center, ?-end",0,0,"",1
+"**\CoApp\Test\*\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, **-begin, *-center --2, ?-end",0,0,"",1
 "**\CoApp\Test\*\Toolkit\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, **-begin, *-center, *-end",0,0,"",1
-"**\CoApp\Test\*\Toolkit\Extensions\*",0,"Partial Path - Front, Exists, **-begin, *-center, *-end --2",0,0,"",1
-"**\CoApp\Test\*\Extensions\StringExtensionsTest\*",0,"Partial Path - Front, Exists, **-begin, *-center --2, *-end",0,0,"",1
-"**\CoApp\Test\*\Extensions\*",0,"Partial Path - Front, Exists, **-begin, *-center --2, *-end --2",0,0,"",1
+"**\CoApp\Test\*\Toolkit\Extensions\*",0,"Partial Path - Front, NotExists, **-begin, *-center, *-end --2",0,0,"",1
+"**\CoApp\Test\*\Extensions\StringExtensionsTest\*",0,"Partial Path - Front, NotExists, **-begin, *-center --2, *-end",0,0,"",1
+"**\CoApp\Test\*\Extensions\*",0,"Partial Path - Front, NotExists, **-begin, *-center --2, *-end --2",0,0,"",1
 "**\CoApp\Test\*\Toolkit\Extensions\**",1,"Partial Path - Front, Exists, **-begin, *-center, **-end",0,0,"",1
-"**\CoApp\Test\*\Extensions\**",0,"Partial Path - Front, Exists, **-begin, *-center --2, **-end",0,0,"",1
-"**\CoApp\Test\**\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, Exists, **-begin, **-center, ?-end",0,0,"",1
+"**\CoApp\Test\*\Extensions\**",0,"Partial Path - Front, NotExists, **-begin, *-center --2, **-end",0,0,"",1
+"**\CoApp\Test\**\Extensions\StringExtensionsTest\?",0,"Partial Path - Front, NotExists, **-begin, **-center, ?-end",0,0,"",1
 "**\CoApp\Test\**\Extensions\StringExtensionsTest\*",1,"Partial Path - Front, Exists, **-begin, **-center, *-end",0,0,"",1
-"**\CoApp\Test\**\Extensions\*",0,"Partial Path - Front, Exists, **-begin, **-center, *-end --2",0,0,"",1
+"**\CoApp\Test\**\Extensions\*",0,"Partial Path - Front, NotExists, **-begin, **-center, *-end --2",0,0,"",1
 "**\CoApp\Test\**\Extensions\**",1,"Partial Path - Front, Exists, **-begin, **-center, **-end",0,0,"",1
 "Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",1,"Partial Path - Back, Exists, ?-end",0,0,"",1
 "Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",1,"Partial Path - Back, Exists, *-end",0,0,"",1
@@ -673,67 +673,67 @@ STR,Exists,Msg,UseText,UseIgnore,Ignore,Escape
 "**CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",1,"Partial Path - Back, Exists, **-begin, **-center, ?-end",0,0,"",1
 "**CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",1,"Partial Path - Back, Exists, **-begin, **-center, *-end",0,0,"",1
 "**CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",1,"Partial Path - Back, Exists, **-begin, **-center, **-end",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt.doom!",0,"Full path, NotExists, no wilds",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, ?-end",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, *-end",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, **-end",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, ?-begin",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, *-begin",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, **-begin",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, ?-begin, ?-end",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, ?-begin, *-end",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, ?-begin, **-end",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, *-begin, ?-end",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, *-begin, *-end",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, *-begin, **-end",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, **-begin, ?-end",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, **-begin, *-end",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, **-begin, **-end",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, ?-center",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This *Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, *-center",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This **Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, **-center",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, ?-begin, ?-center",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, ?-begin, *-center",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, ?-begin, **-center",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, *-begin, ?-center",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, *-begin, *-center",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, *-begin, **-center",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, **-begin, ?-center",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, **-begin, *-center",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, Exists, **-begin, **-center",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, ?-center, ?-end",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, ?-center, *-end",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, ?-center, **-end",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, *-center, ?-end",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, *-center, *-end",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, *-center, **-end",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, **-center, ?-end",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, **-center, *-end",0,0,"",1
-"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, **-center, **-end",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, ?-begin, ?-center, ?-end",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, ?-begin, ?-center, *-end",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, ?-begin, ?-center, **-end",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, ?-begin, *-center, ?-end",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, ?-begin, *-center, *-end",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, ?-begin, *-center, **-end",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, ?-begin, **-center, ?-end",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, ?-begin, **-center, *-end",0,0,"",1
-"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, ?-begin, **-center, **-end",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, *-begin, ?-center, ?-end",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, *-begin, ?-center, *-end",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, *-begin, ?-center, **-end",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, *-begin, *-center, ?-end",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, *-begin, *-center, *-end",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, *-begin, *-center, **-end",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, *-begin, **-center, ?-end",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, *-begin, **-center, *-end",0,0,"",1
-"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, *-begin, **-center, **-end",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, **-begin, ?-center, ?-end",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, **-begin, ?-center, *-end",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, **-begin, ?-center, **-end",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, **-begin, *-center, ?-end",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, **-begin, *-center, *-end",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, **-begin, *-center, **-end",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, Exists, **-begin, **-center, ?-end",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, Exists, **-begin, **-center, *-end",0,0,"",1
-"**CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, Exists, **-begin, **-center, **-end",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt.doom!",0,"Partial Path - Back, NotExists, no wilds",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, ?-end",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, *-end",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, **-end",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, ?-begin",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, *-begin",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, **-begin",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, ?-begin, ?-end",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, ?-begin, *-end",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, ?-begin, **-end",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, *-begin, ?-end",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, *-begin, *-end",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, *-begin, **-end",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, **-begin, ?-end",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, **-begin, *-end",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, **-begin, **-end",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, ?-center",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This *Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, *-center",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This **Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, **-center",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, ?-begin, ?-center",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, ?-begin, *-center",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, ?-begin, **-center",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, *-begin, ?-center",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, *-begin, *-center",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, *-begin, **-center",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, **-begin, ?-center",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, **-begin, *-center",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",0,"Partial Path - Back, NotExists, **-begin, **-center",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, ?-center, ?-end",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, ?-center, *-end",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, ?-center, **-end",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, *-center, ?-end",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, *-center, *-end",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, *-center, **-end",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, **-center, ?-end",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, **-center, *-end",0,0,"",1
+"Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, **-center, **-end",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, ?-begin, ?-center, ?-end",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, ?-begin, ?-center, *-end",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, ?-begin, ?-center, **-end",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, ?-begin, *-center, ?-end",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, ?-begin, *-center, *-end",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, ?-begin, *-center, **-end",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, ?-begin, **-center, ?-end",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, ?-begin, **-center, *-end",0,0,"",1
+"?est\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, ?-begin, **-center, **-end",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, *-begin, ?-center, ?-end",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, *-begin, ?-center, *-end",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, *-begin, ?-center, **-end",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, *-begin, *-center, ?-end",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, *-begin, *-center, *-end",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, *-begin, *-center, **-end",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, *-begin, **-center, ?-end",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, *-begin, **-center, *-end",0,0,"",1
+"*st\CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, *-begin, **-center, **-end",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, **-begin, ?-center, ?-end",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, **-begin, ?-center, *-end",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This Is ? Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, **-begin, ?-center, **-end",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, **-begin, *-center, ?-end",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, **-begin, *-center, *-end",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This * Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, **-begin, *-center, **-end",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.tx?",0,"Partial Path - Back, NotExists, **-begin, **-center, ?-end",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.*",0,"Partial Path - Back, NotExists, **-begin, **-center, *-end",0,0,"",1
+"**CoApp\Toolkit\Extensions\StringExtensionsTest\This ** Legit DOOM File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.**",0,"Partial Path - Back, NotExists, **-begin, **-center, **-end",0,0,"",1
