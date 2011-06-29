@@ -105,6 +105,27 @@ namespace Test.CoApp.Toolkit.Win32
         [TestMethod()]
         public void IsUserInAdminGroupTest()
         {
+            /*
+            for (int i = 0; i < 2; i++)
+            {
+                bool actual;
+                if (i == 0)
+                {
+                    actual = AdminPrivilege.IsUserInAdminGroup();
+                    Assert.IsTrue(actual,
+                                  "Running user was determined to NOT be in the Administrators group.  Ignore if this is correct.");
+                }
+                else
+                {
+                    IPrincipal old = System.Threading.Thread.CurrentPrincipal;
+                    WindowsPrincipal P = new WindowsPrincipal(WindowsIdentity.GetAnonymous());
+                    System.Threading.Thread.CurrentPrincipal = P;
+                    actual = AdminPrivilege.IsUserInAdminGroup();
+                    System.Threading.Thread.CurrentPrincipal = old;
+                    Assert.IsFalse(actual, "Anonymous user was determined to be in the Administrators group.");
+                }
+            }
+            */
             bool expected = false; // TODO: Initialize to an appropriate value
             bool actual;
             actual = AdminPrivilege.IsUserInAdminGroup();
