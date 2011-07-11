@@ -244,6 +244,24 @@ namespace Test.CoApp.Toolkit.Extensions
         }
 
         /// <summary>
+        ///A test for IsSimpleSubPath
+        ///</summary>
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\IsSimpleSubPathStrings.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\IsSimpleSubPathStrings.csv", "IsSimpleSubPathStrings#csv", DataAccessMethod.Sequential), TestMethod()]
+        public void IsSimpleSubPathTest()
+        {
+            string path = (string)testContextInstance.DataRow["STR"];
+            bool expected;
+            if ((int)testContextInstance.DataRow["isSubPath"] > 0)
+                expected = true;
+            else
+                expected = false;
+            bool actual;
+            actual = FilesystemExtensions.IsSimpleSubPath(path);
+            Assert.AreEqual(expected, actual, "String \"" + path + "\"  Expected: " + expected + "  Actual: " + actual);
+            
+        }
+
+        /// <summary>
         ///A test for NameWithoutExt
         ///</summary>
         [TestMethod()]

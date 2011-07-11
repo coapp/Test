@@ -228,6 +228,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Extensions\HasWildCardStrings.csv" />
+    <None Include="Extensions\IsSimpleSubPathStrings.csv" />
     <None Include="Extensions\IsWildStrings.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
