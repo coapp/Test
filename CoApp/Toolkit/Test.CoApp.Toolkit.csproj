@@ -244,6 +244,9 @@
     <None Include="Extensions\VersionStrings.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Extensions\Wildcards.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Extensions\TestStrings.txt">

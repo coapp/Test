@@ -173,6 +173,7 @@ namespace Test.CoApp.Toolkit.Extensions
             Assert.Inconclusive("Test not presently implemented.");
         }
 
+/* TR01: Deprecated
         /// <summary>
         ///A test for IsWildcardMatch
         ///</summary>
@@ -184,15 +185,260 @@ namespace Test.CoApp.Toolkit.Extensions
             // A less obnoxious text string for comparing other tests against.
             const string lessText = @"C:\adirectory\another\andanother\stuff!\filename.file";
             string wildcardMask = (string)testContextInstance.DataRow["STR"];
-            bool expected = (int)testContextInstance.DataRow["Exists"]>0;
+            bool expected = (int)testContextInstance.DataRow["Exists"] > 0;
             bool actual;
-            int pick = (int) testContextInstance.DataRow["UseText"];
+            int pick = (int)testContextInstance.DataRow["UseText"];
             if (pick == 0)
                 actual = text.IsWildcardMatch(wildcardMask);
             else
                 actual = lessText.IsWildcardMatch(wildcardMask);
-            Assert.AreEqual(expected, actual, "String "+pick+": "+(string)testContextInstance.DataRow["Msg"]);
+            Assert.AreEqual(expected, actual, "String " + pick + ": " + (string)testContextInstance.DataRow["Msg"]);
         }
+*/
+
+        /// <summary>
+        ///A test for IsWildcardMatch on the "Happy path"
+        ///</summary>
+        [DeploymentItem("..\\Test\\CoApp\\Toolkit\\Extensions\\Wildcards.csv"), DataSource("Microsoft.VisualStudio.TestTools.DataSource.CSV", "|DataDirectory|\\Extensions\\Wildcards.csv", "Wildcards#csv", DataAccessMethod.Sequential), TestMethod()]
+        public void IsWildcardMatchTest_Happy()
+        {
+            const string Special1 = @"http://somewhere.net/a_%5b^place%5d/";
+            const string Special2 = @"with*specials/in!path/%26that is/";  // I checked, an asterisk is a valid URL/URI character.  (RFC 2396)
+            const string Special3 = @"~fairly$24long/for/package.pkg";
+            const string NotSpecial1 = @"C:/local/location/of/";
+            const string NotSpecial2 = @"significant/length/but/with/";
+            const string NotSpecial3 = @"no/specials/for/package.pkg";
+
+            bool actual;
+            string w1, w2, w3;
+            bool useSpecial = ((string)testContextInstance.DataRow["Specials"]).Equals("yes");
+            w1 = (string) testContextInstance.DataRow["Wild1"];
+            w2 = (string)testContextInstance.DataRow["Wild2"];
+            w3 = (string)testContextInstance.DataRow["Wild3"];
+
+            string mask = "";
+            if (useSpecial)
+            {
+                Random R = new Random();
+                int start, len;
+
+                // first possible wild
+                switch (w1)
+                {
+                    case "_":
+                        mask += Special1;
+                        break;
+                    case "?":
+                        int split = R.Next(Special1.Length);
+                        mask += Special1.Substring(0, split);
+                        mask += '?';
+                        mask += Special1.Substring(split + 1);
+                        break;
+                    case "*":
+                        // the while loop will prevent a '*' from crossing a path boundry
+                        do
+                        {
+                            start = R.Next(Special1.Length);
+                            len = R.Next(Special1.Length - start);
+                        } while (Special1.Substring(start, len).Contains(@"/"));
+                        mask += Special1.Substring(0, start);
+                        mask += @"*";
+                        mask += Special1.Substring(start + len);
+                        break;
+                    case "**":
+                        int rnd = R.Next(Special1.Length);
+                        start = Special1.Substring(0, rnd).LastIndexOf(@"/");
+                        if (start < 0)
+                            start = 0;
+                        mask += @"**";
+                        mask += Special1.Substring(start);
+                        break;
+                    default:
+                        Assert.Fail("Unrecognized wildcard designator from file: '" + w1 + "'");
+                        break;
+                }
+
+                // second possible wild
+                switch (w2)
+                {
+                    case "_":
+                        mask += Special2;
+                        break;
+                    case "?":
+                        int split = R.Next(Special2.Length);
+                        mask += Special2.Substring(0, split);
+                        mask += '?';
+                        mask += Special2.Substring(split + 1);
+                        break;
+                    case "*":
+                        // the while loop will prevent a '*' from crossing a path boundry
+                        do
+                        {
+                            start = R.Next(Special2.Length);
+                            len = R.Next(Special2.Length - start);
+                        } while (Special2.Substring(start, len).Contains(@"/"));
+                        mask += Special2.Substring(0, start);
+                        mask += @"*";
+                        mask += Special2.Substring(start + len);
+                        break;
+                    case "**":
+                        int rnd = R.Next(Special2.Length);
+                        start = Special2.Substring(0, rnd).LastIndexOf(@"/") + 1;
+                        len = Special2.Substring(start).LastIndexOf(@"/");
+                        mask += Special2.Substring(0, start);
+                        mask += @"**";
+                        mask += Special2.Substring(start + len);
+                        break;
+                    default:
+                        Assert.Fail("Unrecognized wildcard designator from file: '" + w1 + "'");
+                        break;
+                }
+
+                // third possible wild
+                switch (w3)
+                {
+                    case "_":
+                        mask += Special3;
+                        break;
+                    case "?":
+                        int split = R.Next(Special3.Length);
+                        mask += Special3.Substring(0, split);
+                        mask += '?';
+                        mask += Special3.Substring(split + 1);
+                        break;
+                    case "*":
+                        start = Special3.LastIndexOf(@"/")+1;
+                        mask += Special3.Substring(0, start);
+                        mask += @"*";
+                        break;
+                    case "**":
+                        int rnd = R.Next(Special3.Length);
+                        start = Special3.Substring(0, rnd).LastIndexOf(@"/") + 1;
+                        len = Special3.Substring(start).LastIndexOf(@"/");
+                        mask += Special3.Substring(0, start);
+                        mask += @"**";
+                        if (len > 0)
+                            mask += Special3.Substring(start + len);
+                        break;
+                    default:
+                        Assert.Fail("Unrecognized wildcard designator from file: '" + w1 + "'");
+                        break;
+                }
+                actual = (Special1+Special2+Special3).IsWildcardMatch(mask);
+            }
+            else
+            {
+                Random R = new Random();
+                int start, len;
+
+                // first possible wild
+                switch (w1)
+                {
+                    case "_":
+                        mask += NotSpecial1;
+                        break;
+                    case "?":
+                        int split = R.Next(NotSpecial1.Length);
+                        mask += NotSpecial1.Substring(0, split);
+                        mask += '?';
+                        mask += NotSpecial1.Substring(split + 1);
+                        break;
+                    case "*":
+                        // the while loop will prevent a '*' from crossing a path boundry
+                        do
+                        {
+                            start = R.Next(NotSpecial1.Length);
+                            len = R.Next(NotSpecial1.Length - start);
+                        } while (NotSpecial1.Substring(start, len).Contains(@"/"));
+                        mask += NotSpecial1.Substring(0, start);
+                        mask += @"*";
+                        mask += NotSpecial1.Substring(start + len);
+                        break;
+                    case "**":
+                        int rnd = R.Next(NotSpecial1.Length);
+                        start = NotSpecial1.Substring(0, rnd).LastIndexOf(@"/");
+                        if (start < 0)
+                            start = 0;
+                        mask += @"**";
+                        mask += NotSpecial1.Substring(start);
+                        break;
+                    default:
+                        Assert.Fail("Unrecognized wildcard designator from file: '" + w1 + "'");
+                        break;
+                }
+
+                // second possible wild
+                switch (w2)
+                {
+                    case "_":
+                        mask += NotSpecial2;
+                        break;
+                    case "?":
+                        int split = R.Next(NotSpecial2.Length);
+                        mask += NotSpecial2.Substring(0, split);
+                        mask += '?';
+                        mask += NotSpecial2.Substring(split + 1);
+                        break;
+                    case "*":
+                        // the while loop will prevent a '*' from crossing a path boundry
+                        do
+                        {
+                            start = R.Next(NotSpecial2.Length);
+                            len = R.Next(NotSpecial2.Length - start);
+                        } while (NotSpecial2.Substring(start, len).Contains(@"/"));
+                        mask += NotSpecial2.Substring(0, start);
+                        mask += @"*";
+                        mask += NotSpecial2.Substring(start + len);
+                        break;
+                    case "**":
+                        int rnd = R.Next(NotSpecial2.Length);
+                        start = NotSpecial2.Substring(0, rnd).LastIndexOf(@"/") + 1;
+                        len = NotSpecial2.Substring(start).LastIndexOf(@"/");
+                        mask += NotSpecial2.Substring(0, start);
+                        mask += @"**";
+                        mask += NotSpecial2.Substring(start + len);
+                        break;
+                    default:
+                        Assert.Fail("Unrecognized wildcard designator from file: '" + w1 + "'");
+                        break;
+                }
+
+                // third possible wild
+                switch (w3)
+                {
+                    case "_":
+                        mask += NotSpecial3;
+                        break;
+                    case "?":
+                        int split = R.Next(NotSpecial3.Length);
+                        mask += NotSpecial3.Substring(0, split);
+                        mask += '?';
+                        mask += NotSpecial3.Substring(split + 1);
+                        break;
+                    case "*":
+                        start = NotSpecial3.LastIndexOf(@"/")+1;
+                        mask += NotSpecial3.Substring(0, start);
+                        mask += @"*";
+                        break;
+                    case "**":
+                        int rnd = R.Next(NotSpecial3.Length);
+                        start = NotSpecial3.Substring(0, rnd).LastIndexOf(@"/") + 1;
+                        len = NotSpecial3.Substring(start).LastIndexOf(@"/");
+                        mask += NotSpecial3.Substring(0, start);
+                        mask += @"**";
+                        if (len > 0)
+                            mask += NotSpecial3.Substring(start + len);
+                        break;
+                    default:
+                        Assert.Fail("Unrecognized wildcard designator from file: '" + w1 + "'");
+                        break;
+                }
+                actual = (NotSpecial1 + NotSpecial2 + NotSpecial3).IsWildcardMatch(mask);
+            }// end else
+            Assert.IsTrue(actual, "Failed on "+(useSpecial?"Specials":"No-Specials")+":  Mask = \""+mask+"\"");
+        }
+
+
 
         /// <summary>
         ///A test for IsEmail
