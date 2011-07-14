@@ -64,27 +64,6 @@ namespace Test.CoApp.Toolkit.Extensions
         //
         #endregion
 
-
-        /// <summary>
-        ///A test for Add
-        ///</summary>
-        public void AddTestHelper<T>()
-        {
-            IEnumerable<T> collection = null; // TODO: Initialize to an appropriate value
-            T newItem = default(T); // TODO: Initialize to an appropriate value
-            IEnumerable<T> expected = null; // TODO: Initialize to an appropriate value
-            IEnumerable<T> actual;
-            actual = LinqExtensions.Add<T>(collection, newItem);
-            Assert.AreEqual(expected, actual);
-            Assert.Inconclusive("Verify the correctness of this test method.");
-        }
-
-        [TestMethod()]
-        public void AddTest()
-        {
-            AddTestHelper<GenericParameterHelper>();
-        }
-
         /// <summary>
         ///A test for ByIndex
         ///</summary>

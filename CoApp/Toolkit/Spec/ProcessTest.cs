@@ -64,7 +64,7 @@ namespace Test.CoApp.Toolkit.Spec
         //
         #endregion
 
-
+        /*
         /// <summary>
         ///A test for Process Constructor
         ///</summary>
@@ -119,6 +119,6 @@ namespace Test.CoApp.Toolkit.Spec
             actual = target.ReadOnlyStringPooling;
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
-        }
+        }*/
     }
 }
