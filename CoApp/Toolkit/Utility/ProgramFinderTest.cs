@@ -141,5 +141,16 @@ namespace Test.CoApp.Toolkit.Utility
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("Verify the correctness of this test method.");
         }
+
+        /// <summary>
+        /// A custom test for ScanForFile
+        /// </summary>
+        [TestMethod]
+        public void ScanForFileTest_Custom()
+        {
+            string ouput = ProgramFinder.ProgramFilesAndDotNet.ScanForFile("candle.exe");
+            Assert.IsNotNull(ouput);
+        }
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using CoApp.Toolkit.Configuration;
+﻿using System.Windows.Forms;
+using CoApp.Toolkit.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.Win32;
 using System.Collections.Generic;
@@ -465,6 +466,17 @@ namespace Test.CoApp.Toolkit.Configuration
             global::CoApp.Toolkit.Configuration.RegistryView actual;
             actual = global::CoApp.Toolkit.Configuration.RegistryView.System;
             Assert.Inconclusive("Verify the correctness of this test method.");
+        }
+
+        /// <summary>
+        ///A custom test for System
+        ///</summary>
+        [TestMethod()]
+        public void SystemTest_custom()
+        {
+            string output = global::CoApp.Toolkit.Configuration.RegistryView.System[@"SOFTWARE\Microsoft\Microsoft SDKs\Windows", "CurrentInstallFolder"].Value as string;
+            MessageBox.Show(output);
+            Assert.IsNotNull(output);
         }
 
         /// <summary>

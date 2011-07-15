@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using CoApp.Toolkit.Tasks;
 using System.Threading.Tasks;
 
-namespace Test
+namespace Test.CoApp.Toolkit.Engine
 {
     
     
@@ -16,9 +16,6 @@ namespace Test
     [TestClass()]
     public class PackageManagerTest
     {
-        private static System.Data.DataSet _data;
-        private static readonly string[] ItemDelim = { "\",\"", "\" ,\"", "\", \"", "\" , \"" };
-
 
         /// <summary>
         ///Gets or sets the test context which provides
@@ -106,8 +103,8 @@ namespace Test
             } 
             Assert.IsNotNull(actual, "Received NULL session feed list after assignment.");
             
-            for (int i = 0; i < expected.Count; i++)
-                if (!actual.Contains(expected[i]))
+            foreach (object t in expected)
+                if (!actual.Contains(t))
                 {
                     string Estring = "";
                     for (int j = 0; j < expected.Count; j++)
@@ -162,7 +159,7 @@ namespace Test
         public void InstallPackagesTest()
         {
             PackageManager target = new PackageManager();
-            IEnumerable<Package> packages = null; // TODO: Initialize to an appropriate value
+            IEnumerable<global::CoApp.Toolkit.Engine.Package> packages = null; // TODO: Initialize to an appropriate value
             MessageHandlers messageHandlers = null; // TODO: Initialize to an appropriate value
             Task expected = null; // TODO: Initialize to an appropriate value
             Task actual;
@@ -283,7 +280,7 @@ namespace Test
             {
                 if (Test.misc.Results.Ignore.Equals(val))
                 {
-                    Console.Out.WriteLine("Skipping string " + (string) Context.DataRow["string"] + " for test " +
+                    System.Console.Out.WriteLine("Skipping string " + (string) Context.DataRow["string"] + " for test " +
                                           name);
                     return;
                 }

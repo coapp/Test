@@ -1,0 +1,1 @@
+PowerShell -ExecutionPolicy Unrestricted -NoLogo -File C:\Scripts\Client\Client_Script.ps1
