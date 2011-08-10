@@ -4,3 +4,4 @@
 *.opensdf
 obj
 bin
+_ReSharper*

@@ -1,0 +1,5 @@
+<Modules>
+  <Module PersistentId="75C9D77B-4EE0-4C74-9251-A2A7710A0095" ModuleId="ClientLib" />
+  <Module PersistentId="B60AAE70-3D1E-42B6-8284-1EE42EB8C23F" ModuleId="CommonLib" />
+  <Module PersistentId="1E4CB115-2B0D-4602-B697-5D6AC0464575" ModuleId="ServerLib" />
+</Modules>
