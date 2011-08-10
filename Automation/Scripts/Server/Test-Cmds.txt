@@ -1,0 +1,51 @@
+cd C:\Tim_scripts\Server
+Import-Module HyperV
+Import-Module .\CoApp_Tests.psd1
+Run-Test -Name "MyTest" -Base "W2k3-Dev-base.vhd" -Script "Dev_User_script.ps1" -Mem "1GB" -CPU "1" -Limit "100" -Out_Path ".\test\"
+
+$Name = "MyTest"
+$Base = "W2k3-Dev-base.vhd"
+$Script = "Dev_User_script.ps1"
+$Mem = "1GB"
+$CPU = "1"
+$Limit = "100"
+$Out_Path = '.\test\'
+
+$P = New-Pipe 'Test_Dev_7x64_IO_Pipe'
+
+Run-Test "MyTest" "W2k3-Dev-base.vhd" "Dev_User_script.ps1" "1GB" "1" "100" ".\7-19-2011\"
+
+Run-Test -Name "MyTest" -Base "W2k3-Dev-base.vhd" -Script "Dev_User_script.ps1" -Mem "1GB" -CPU "1" -Limit "100" -Out_Path ".\test\"
+
+'$Web = new-object System.Net.WebClient;
+$URL = "http://virmitio.com/Scripts/Common/Byte_String.ps1";
+$Web.DownloadFile($URL,("C:\Scripts\Common\Byte_String.ps1"));
+'
+
+'$Web = new-object System.Net.WebClient;
+$URL = "http://virmitio.com/Scripts/Client/Client_Func.ps1";
+$Web.DownloadFile($URL,("C:\Scripts\Client\Client_Func.ps1"));
+'
+
+
+function RR {param([parameter(Mandatory = $true)]$pipe) process {while ($true) {$pipe.ReadByte();}}}
+
+
+#Read in the script file provided
+$Client_Script = Get-Content .\Dev_User_script.ps1;
+
+#Send the script to run
+Write-Pipe $P $Client_Script;
+#Send the notice for end of this instruction set
+Write-Pipe $P '^^^EOF^^^';
+
+#Read and record from the pipe until the VM says it's done.
+$msg = "___ Begin VM Output File  ---  $Name ___`n"
+while (!($msg.Equals('^^^TERM^^^'))) {
+Add-Content -Path ('.\test.log') -Value $msg;
+$msg = Server_Read $P;
+}
+
+
+$up = '$port.Close(); $port.BaudRate = 115200; $port.WriteBufferSize = 16384; $port.Open();'
+Write-Pipe $pipe $up

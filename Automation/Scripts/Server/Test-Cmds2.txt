@@ -1,0 +1,15 @@
+do{
+$msg = Read-Pipe $pipe;
+$msg;
+}while (!($msg.Contains('^^^TERM^^^')))
+
+
+$web = new-object System.Net.WebClient;
+$web.DownloadFile('http://virmitio.com/scripts/CommonLib.dl_', 'C:\Scripts\CommonLib.dll');
+$web.DownloadFile('http://virmitio.com/scripts/ClientLib.dl_', 'C:\Scripts\ClientLib.dll');
+
+cd C:\Scripts\
+Import-Module .\CommonLib.dll
+Import-Module .\ClientLib.dll
+Initialize-Port "COM1"
+

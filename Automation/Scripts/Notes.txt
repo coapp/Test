@@ -1,0 +1,60 @@
+Notes regarding these scripts, what they're for, and how they do what they do...
+================================================================================
+
+General layout:
+	Client - Anything in here needs to be on the client VM to make the world
+		 work happy.  It is assumed that this will be placed somewhere
+		 like C:\Scripts\.  The files in the \Client\Startup\ directory
+		 Are to be placed in the 'All Users' profile at:
+				Start Menu\Programs\Startup\
+
+	Common - These are script files which are used by both the client-side
+		 and the server-side scripts.  As with the client tools, it has
+		 been my assumption that this directory would be placed in 
+		 C:\Scripts\.
+
+	Server - As you may have guessed, all files in this subdirectory are for
+		 running the server-side scripts.  I don't think I was explicit
+		 in the placement of these, though the Server folder must be in
+		 the same directory on the host machine as the Common folder.
+
+
+Client-Host Communication:
+	I was having trouble determining how to get the client VMs to talk to
+	the host machine without requiring a human body to transfer information.
+	The solution I found was to attach a virtual serial port of the VM to a
+	named pipe on the host machine.
+
+	Unfortunately, the powershell (.NET really, but I'm using it all through
+	powershell) interfaces for communicating are different between pipes and
+	serial ports.  I built helper functions for both client-side and server-
+	side to make certain communication was consistant for each direction of 
+	transit.  In case it is necessary for someone else to make serious 
+	changes to the scripts, the "packet structure" I am using for each 
+	direction (and the rationalle for it) are described below:
+
+	Server --> Client:
+		+ Server can write to a pipe only as byte arrays.  
+		+ All data is assumed to be in string format.
+		+ Easiest means for Client to receive is with a delimiter of 
+			some sort at the end.
+
+		Procedure:
+			Current "End of Line" delimiter is '^^^DONE^^^.
+			Append the EOL delimiter to the string to send.
+			Convert the altered string to a byte array.
+			Send the byte array.
+
+
+	Client --> Server:
+		+ Client may write to the port in similar manner to 
+			System.out in java. ('write' keyword instead of 'print')
+		+ Server reads everything as bytes.  Result must be translated.
+
+		Procedure:
+			Client converts message into byte array.
+			Client sends the message byte array.
+			Server receives and translates the portion of the
+				receive buffer that actually has data in it.
+
+================================================================================
