@@ -1,9 +1,0 @@
-﻿Sam Haul's Fine Wines
-Thinking-of-you
-Arbitrary
-totallyawesomesupersweetstuff
-some_package_name-here.p
-gtk-1.0.0.0-x86.tgz
-1985
-'Twas brillig, and the slithy toves did gyre and gimble in the wabe...
-EndOfList

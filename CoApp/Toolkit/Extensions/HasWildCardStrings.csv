@@ -1,6 +1,0 @@
-STR,Exists,Msg
-"C:\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest.cs",1,"Full path, Exists, no wilds."
-"C:\CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest.csss",0,"Full path, NotExists, no wilds."
-"StringExtensionsTest.cs",1,"No path, Exists, no wilds."
-"StringExtensionsTest.csss",0,"No path, NotExists, no wilds."
-"
