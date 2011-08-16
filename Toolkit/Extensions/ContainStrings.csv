@@ -1,0 +1,44 @@
+STR,exists,correctCase,hasWildcard,existsWithWildcard
+"Sam Haul's Fine Wines",1,1,0,0
+"Thinking-of-you",1,1,0,0
+"Arbitrary",1,1,0,0
+"totallyawesomesupersweetstuff",1,1,0,0
+"some_package_name-here.p",1,1,0,0
+"gtk-1.0.0.0-x86.tgz",1,1,0,0
+"1985",1,1,0,0
+"'Twas brillig, and the slithy toves did gyre and gimble in the wabe...",1,1,0,0
+"EndOfList",1,1,0,0
+"sam haul's fine wines",1,0,0,0
+"thinking-of-you",1,0,0,0
+"arbitrary",1,0,0,0
+"Totallyawesomesupersweetstuff",1,0,0,0
+"Some_package_name-here.p",1,0,0,0
+"GTK-1.0.0.0-x86.tgz",1,0,0,0
+"1985",1,1,0,0
+"'twas brillig, and the slithy toves did gyre and gimble in the wabe...",1,0,0,0
+"endoflist",1,0,0,0
+"SAM HAUL'S FINE WINES",1,0,0,0
+"THINKING-OF-YOU",1,0,0,0
+"ARBITRARY",1,0,0,0
+"TOTALLYAWESOMESUPERSWEETSTUFF",1,0,0,0
+"SOME_PACKAGE_NAME-HERE.P",1,0,0,0
+"GTK-1.0.0.0-X86.TGZ",1,0,0,0
+"1985",1,1,0,0
+"'TWAS BRILLIG, AND THE SLITHY TOVES DID GYRE AND GIMBLE IN THE WABE...",1,0,0,0
+"ENDOFLIST",1,0,0,0
+"This one does not exist.",0,0,0,0
+"Sam*",0,1,1,1
+"sam*",0,0,1,1
+"*-of-you",0,1,1,1
+"*WABE...",0,0,1,1
+"*did gyre*",0,1,1,1
+"*SLITHY TOVES*",0,0,1,1
+"Sam Haul?? Fine Wines",0,1,1,1
+"Thinking?of?you",0,1,1,1
+"Arbitr??y",0,1,1,1
+"totally?wesome?uper?weet?tuff",0,1,1,1
+"S?me_package_*-here.p",0,1,1,1
+"gtk-1.DUDE.0-x86.tgz",0,0,0,0
+"?985",0,1,1,1
+"'twas *, and the slithy toves did gyre and gimble in the wabe...",0,0,1,1
+"EndO?*List",0,1,1,1

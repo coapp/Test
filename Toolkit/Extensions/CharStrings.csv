@@ -1,0 +1,17 @@
+STR,Present,FirstNon
+". thisaerngolypufk",0,0
+". aeiouyfghklnprst",0,0
+". hsaerngolyufk",0,0
+". aeouyfghklnrs",0,0
+". THISAERNGOLYPUFK",0,1
+". AEIOUYFGHKLNPRST",0,1
+". ThisaterngIolyPufk",1,90
+". aeIiouyfghklnPrsTt",1,90
+" ThisaterngIolyPufk",0,21
+" aeIiouyfghklnPrsTt",0,21
+". abcdefghijklmnopqrstuvwxyz",0,0
+". ABCDEFGHIJKLMNOPQRSTUVWXYZ",0,1
+". abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",1,90
+"zxwvqmjdcb",0,0
+"1234567890",0,0
+" This",0,8

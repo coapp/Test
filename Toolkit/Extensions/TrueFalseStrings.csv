@@ -1,0 +1,8 @@
+STR,True,False
+"true",1,0
+"false",0,1
+"True",1,0
+"False",0,1
+"TRUE",1,0
+"FALSE",0,1
+"neither",0,0

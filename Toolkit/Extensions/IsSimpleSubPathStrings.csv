@@ -1,0 +1,22 @@
+STR,isSubPath
+foo/bar,1
+foo\bar,1
+foo,1
+"CoApp\Test\CoApp\Toolkit\Extensions\StringExtensionsTest\This Is A Legit File Name In Windows ,.[]{};+-_=)(&^%$#@!~`'.txt",1
+.f/f,1
+./f,0
+f/.f/f,1
+f/./f,0
+../f,0
+f/..f/fafa,1
+f/../f,0
+f/f/..,0
+f/,1
+/f,0
+C:\f,0
+:,0
+f:,0
+f**,0
+**,0
+f*,0
+*f,0
