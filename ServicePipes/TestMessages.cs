@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.IO.Pipes;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using CoApp.Toolkit.Engine;
 
@@ -102,19 +104,17 @@ namespace ServicePipes
             public string Message;
         }
 
+        private const string ServerName = ".";
         private static int Timeout = 3000;
         private const string PipeName = @"CoAppInstaller";
         private static Pipe asyncServer;
         private static Pipe syncServer;
         private static Pipe syncReturn;
 
-        private static string HelpMessage = @"
-Usage:  ServicePipes <Sync | Async> <System_Feed_Location> <Session_Feed_Location> <Local_Package_Name> [Timeout]
-
-<Local_Package_Name>\tThis should be the path to a package not contained in any feed.
-Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
-
-";
+        private static string HelpMessage = 
+            "\nUsage:  ServicePipes <Sync | Async> <System_Feed_Location> <Session_Feed_Location> <Local_Package_Name> [Timeout]"+
+            "\n\n<Local_Package_Name>\tThis should be the path to a package not contained in any feed.\n"+
+            "Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).\n\n";
 
         static void Main(string[] args)
         {
@@ -126,66 +126,73 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
             if (args.Length > 4)
                 if (!(Int32.TryParse(args[4], out Timeout)))
                     Timeout = 3000;
-            List<Result> Results = new List<Result>();
-            asyncServer = new Pipe(new NamedPipeClientStream(PipeName));
-            syncServer = new Pipe(new NamedPipeClientStream(PipeName));
-
+            
             if (args[0].ToLower().Equals("async"))
             {
-                Results.Add(AsyncConnect());
-                if (Results[Results.Count - 1].Passed)
+                asyncServer = new Pipe(new NamedPipeClientStream(ServerName, PipeName, PipeDirection.InOut, PipeOptions.Asynchronous, TokenImpersonationLevel.Impersonation, HandleInheritability.Inheritable));
+                if (AsyncConnect().Passed)
                 {
                     // Add Async tests here
-                    Results.Add(AsyncAddSystemFeed(args[1]));
-                    Results.Add(AsyncAddSessionFeed(args[2]));
-                    Results.Add(AsyncFindFeeds());
-                    Results.Add(AsyncFindAllPackages());
-                    Results.Add(AsyncFindPackage_Failure());
+                    Output(AsyncAddSystemFeed(args[1]));
+                    Output(AsyncAddSessionFeed(args[2]));
+                    Output(AsyncFindFeeds());
+                    Output(AsyncFindAllPackages());
+                    Output(AsyncFindPackage_Failure());
                     UrlEncodedMessage LocalPackage, FeedPackage;
-                    Results.Add(AsyncRecognizeFile(args[3]));
-                    Results.Add(AsyncFindFirstPackageByName(args[3], out LocalPackage));
-                    Results.Add(AsyncFindFirstUninstalledPackage(out FeedPackage));
-                    Results.Add(AsyncVerifySig(args[3]));
-                    Results.Add(AsyncVerifySig(args[3],true));
-                    Results.Add(AsyncUnableToAcquire());
-                    string LocalPackageCName = LocalPackage["canonical-name"];
-                    string FeedPackageCName = FeedPackage["canonical-name"];
-                    Results.Add(AsyncPackageDetails(FeedPackageCName));
-                    Results.Add(AsyncInstallImmaginaryPackage());
-                    Results.Add(AsyncInstallLocalPackage(LocalPackageCName));
-                    Results.Add(AsyncSetPackageAttribs(LocalPackageCName,null,null,false));
-                    Results.Add(AsyncRemovePackage(LocalPackageCName));
-                    Results.Add(AsyncRemoveSessionFeed(args[2]));
-                    Results.Add(AsyncRemoveSystemFeed(args[1]));
+                    Output(AsyncRecognizeFile(args[3]));
+                    Output(AsyncFindFirstPackageByName(args[3], out LocalPackage));
+                    Output(AsyncFindFirstUninstalledPackage(out FeedPackage));
+                    Output(AsyncVerifySig(args[3]));
+                    Output(AsyncVerifySig(args[3],true));
+                    Output(AsyncUnableToAcquire());
+                    string LocalPackageCName = "LocalPackage_Failed_To_Be_Found";
+                    string FeedPackageCName = "FeedPackage_Failed_To_Be_Found";
+                    if (LocalPackage != null)
+                        LocalPackageCName = LocalPackage["canonical-name"];
+                    if (FeedPackage != null)
+                        FeedPackageCName = FeedPackage["canonical-name"];
+                    Output(AsyncPackageDetails(FeedPackageCName));
+                    Output(AsyncInstallImmaginaryPackage());
+                    Output(AsyncInstallLocalPackage(LocalPackageCName));
+                    Output(AsyncSetPackageAttribs(LocalPackageCName,null,null,false));
+                    Output(AsyncRemovePackage(LocalPackageCName));
+                    Output(AsyncRemoveSessionFeed(args[2]));
+                    Output(AsyncRemoveSystemFeed(args[1]));
+
+                    asyncServer.Close();
                 }
             }
             else if (args[0].ToLower().Equals("sync"))
             {
-                Results.Add(SyncConnect());
-                if (Results[Results.Count - 1].Passed)
+                syncServer = new Pipe(new NamedPipeClientStream(ServerName, PipeName, PipeDirection.Out, PipeOptions.None, TokenImpersonationLevel.Impersonation, HandleInheritability.Inheritable));
+                if (SyncConnect().Passed)
                 {
                     // Add Sync tests here
-                    Results.Add(SyncAddSystemFeed(args[1]));
-                    Results.Add(SyncAddSessionFeed(args[2]));
-                    Results.Add(SyncFindFeeds());
-                    Results.Add(SyncFindAllPackages());
-                    Results.Add(SyncFindPackage_Failure());
+                    Output(SyncAddSystemFeed(args[1]));
+                    Output(SyncAddSessionFeed(args[2]));
+                    Output(SyncFindFeeds());
+                    Output(SyncFindAllPackages());
+                    Output(SyncFindPackage_Failure());
                     UrlEncodedMessage LocalPackage, FeedPackage;
-                    Results.Add(SyncRecognizeFile(args[3]));
-                    Results.Add(SyncFindFirstPackageByName(args[3], out LocalPackage));
-                    Results.Add(SyncFindFirstUninstalledPackage(out FeedPackage));
-                    Results.Add(SyncVerifySig(args[3]));
-                    Results.Add(SyncVerifySig(args[3], true));
-                    Results.Add(SyncUnableToAcquire());
+                    Output(SyncRecognizeFile(args[3]));
+                    Output(SyncFindFirstPackageByName(args[3], out LocalPackage));
+                    Output(SyncFindFirstUninstalledPackage(out FeedPackage));
+                    Output(SyncVerifySig(args[3]));
+                    Output(SyncVerifySig(args[3], true));
+                    Output(SyncUnableToAcquire());
                     string LocalPackageCName = LocalPackage["canonical-name"];
                     string FeedPackageCName = FeedPackage["canonical-name"];
-                    Results.Add(SyncPackageDetails(FeedPackageCName));
-                    Results.Add(SyncInstallImmaginaryPackage());
-                    Results.Add(SyncInstallLocalPackage(LocalPackageCName));
-                    Results.Add(SyncSetPackageAttribs(LocalPackageCName, null, null, false));
-                    Results.Add(SyncRemovePackage(LocalPackageCName));
-                    Results.Add(SyncRemoveSessionFeed(args[2]));
-                    Results.Add(SyncRemoveSystemFeed(args[1]));
+                    Output(SyncPackageDetails(FeedPackageCName));
+                    Output(SyncInstallImmaginaryPackage());
+                    Output(SyncInstallLocalPackage(LocalPackageCName));
+                    Output(SyncSetPackageAttribs(LocalPackageCName, null, null, false));
+                    Output(SyncRemovePackage(LocalPackageCName));
+                    Output(SyncRemoveSessionFeed(args[2]));
+                    Output(SyncRemoveSystemFeed(args[1]));
+
+
+                    syncServer.Close();
+                    syncReturn.Close();
                 }
             }
             else
@@ -194,27 +201,26 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
                 return;
             }
 
-            // display results
-            foreach (Result result in Results)
-            {
-                ConsoleColor fg = Console.ForegroundColor;
-                if (!result.Passed)
-                {
-                    Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Out.Write(result.Name);
-                
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.Out.WriteLine(":  "+result.Message+"\n");
-                }
-                else
-                {
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Out.WriteLine(result.Name);
-                }
-                Console.ForegroundColor = fg;
-            }
         }
 
+        private static void Output(Result result)
+        {
+            ConsoleColor fg = Console.ForegroundColor;
+            if (!result.Passed)
+            {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.Out.Write(result.Name);
+
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Out.WriteLine(":  " + result.Message + "\n");
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Out.WriteLine(result.Name);
+            }
+            Console.ForegroundColor = fg;
+        }
 
         /** Example of test method to be called by Main()
          
@@ -233,14 +239,15 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            TestResult.Message = "Failed sync connection.";
+            TestResult.Message = "Failed async connection.";
             TestResult.Passed = false;
             try
             {
                 //Send the connection message
                 asyncServer.Connect(Timeout); // 5 second maximum wait time for initial connect.
-                UrlEncodedMessage msg = new UrlEncodedMessage("start-session",new Dictionary<string, string>());
-                msg.Add("client","SyncTestClient");
+                asyncServer.pipe.ReadMode = PipeTransmissionMode.Message;
+                UrlEncodedMessage msg = new UrlEncodedMessage("start-session", new Dictionary<string, string>());
+                msg.Add("client","AsyncTestClient");
                 msg.Add("id","MyUniqueID");
                 asyncServer.Write(msg.ToString());
 
@@ -248,7 +255,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
                 UrlEncodedMessage response = new UrlEncodedMessage(asyncServer.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
                 // check the command and data to make sure it's correct;
-                switch (response.Command)
+                switch (response.Command.ToLower())
                 {
                     case "session-started":
                         TestResult.Passed = true;
@@ -268,20 +275,23 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            TestResult.Message = "Failed async connection.";
+            TestResult.Message = "Failed sync connection.";
             TestResult.Passed = false;
             try
             {
                 //Send the connection message
                 syncServer.Connect(Timeout);
-                UrlEncodedMessage msg = new UrlEncodedMessage("start-session",new Dictionary<string, string>());
-                msg.Add("client","AsyncTestClient");
-                msg.Add("id","AsyncUniqueID");
+                syncServer.pipe.ReadMode = PipeTransmissionMode.Message;
+                UrlEncodedMessage msg = new UrlEncodedMessage("start-session", new Dictionary<string, string>());
+                msg.Add("client","SyncTestClient");
+                msg.Add("id","SyncUniqueID");
                 msg.Add("async","false");
                 syncServer.Write(msg.ToString());
 
                 //Receive the response
-                syncReturn = new Pipe(new NamedPipeClientStream(PipeName + "-AsyncUniqueID"));
+                syncReturn = new Pipe(new NamedPipeClientStream(ServerName, PipeName + "-SyncUniqueID", PipeDirection.In, PipeOptions.None, TokenImpersonationLevel.Impersonation, HandleInheritability.Inheritable));
+                syncReturn.Connect(Timeout);
+                syncReturn.pipe.ReadMode = PipeTransmissionMode.Message;
                 UrlEncodedMessage response = new UrlEncodedMessage(syncReturn.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
                 // check the command and data to make sure it's correct;
@@ -453,7 +463,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
             try
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("find-package", new Dictionary<string, string>());
-                syncServer.Write(msg.ToString());
+                asyncServer.Write(msg.ToString());
 
                 TestResult.Message += "  Received message(s):";
                 while (true)
@@ -480,7 +490,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("find-package", new Dictionary<string, string>());
                 msg.Add("name", "IAm_A_nonExistant_package_NaMe");
-                syncServer.Write(msg.ToString());
+                asyncServer.Write(msg.ToString());
 
                 UrlEncodedMessage response = new UrlEncodedMessage(asyncServer.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
@@ -504,7 +514,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("find-package", new Dictionary<string, string>());
                 msg.Add("installed", "false");
-                syncServer.Write(msg.ToString());
+                asyncServer.Write(msg.ToString());
 
                 TestResult.Message += "  Received message(s):";
                 while (true)
@@ -536,7 +546,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
                 UrlEncodedMessage msg = new UrlEncodedMessage("find-package", new Dictionary<string, string>());
                 msg.Add("name", "false");
                 msg.Add("installed",installed);
-                syncServer.Write(msg.ToString());
+                asyncServer.Write(msg.ToString());
 
                 TestResult.Message += "  Received message(s):";
                 while (true)
@@ -566,7 +576,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("install-package", new Dictionary<string, string>());
                 msg.Add("canonical-name", "IAm_A_nonExistant_package-1.0.0.0-any");
-                syncServer.Write(msg.ToString());
+                asyncServer.Write(msg.ToString());
 
                 UrlEncodedMessage response = new UrlEncodedMessage(asyncServer.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
@@ -591,7 +601,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("install-package", new Dictionary<string, string>());
                 msg.Add("canonical-name", CanonicalName);
-                syncServer.Write(msg.ToString());
+                asyncServer.Write(msg.ToString());
 
                 TestResult.Message += "  Received message(s):";
                 bool running = true;
@@ -651,7 +661,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
                 msg.Add("location", Location);
                 if (Remote != null)
                     msg.Add("remote-location", Remote);
-                syncServer.Write(msg.ToString());
+                asyncServer.Write(msg.ToString());
 
                 UrlEncodedMessage response = new UrlEncodedMessage(asyncServer.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
@@ -677,7 +687,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("get-package-details", new Dictionary<string, string>());
                 msg.Add("canonical-name", CanonicalName);
-                syncServer.Write(msg.ToString());
+                asyncServer.Write(msg.ToString());
 
                 UrlEncodedMessage response = new UrlEncodedMessage(asyncServer.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
@@ -702,7 +712,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("verify-file-signature", new Dictionary<string, string>());
                 msg.Add("filename", FileName);
-                syncServer.Write(msg.ToString());
+                asyncServer.Write(msg.ToString());
 
                 UrlEncodedMessage response = new UrlEncodedMessage(asyncServer.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
@@ -727,7 +737,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("verify-file-signature", new Dictionary<string, string>());
                 msg.Add("filename", FileName);
-                syncServer.Write(msg.ToString());
+                asyncServer.Write(msg.ToString());
 
                 UrlEncodedMessage response = new UrlEncodedMessage(asyncServer.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
@@ -754,7 +764,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("remove-package", new Dictionary<string, string>());
                 msg.Add("canonical-name", CanonicalName);
-                syncServer.Write(msg.ToString());
+                asyncServer.Write(msg.ToString());
 
                 TestResult.Message += "  Received message(s):";
                 bool running = true;
@@ -901,21 +911,28 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
                 //in this test, receiving a message means that a failure has occurred.
             }
-            catch (TimeoutException) { TestResult.Passed = true; }
-            catch { }
+            catch (TimeoutException) {TestResult.Passed = true;}
+            catch {}
 
             //verify that the change occurred
             UrlEncodedMessage check = AsyncGetPackage(CanonicalName);
-            if (Active != null)
-                if (Active != ((bool?)check["active"] ?? false))
-                    TestResult.Passed = false;
-            if (Required != null)
-                if (Required != ((bool?)check["required"] ?? false))
-                    TestResult.Passed = false;
-            if (Blocked != null)
-                if (Blocked != ((bool?)check["blocked"] ?? false))
-                    TestResult.Passed = false;
-            
+            if (check != null)
+            {
+                if (Active != null)
+                    if (Active != ((bool?) check["active"] ?? false))
+                        TestResult.Passed = false;
+                if (Required != null)
+                    if (Required != ((bool?) check["required"] ?? false))
+                        TestResult.Passed = false;
+                if (Blocked != null)
+                    if (Blocked != ((bool?) check["blocked"] ?? false))
+                        TestResult.Passed = false;
+            }
+            else
+            {
+                TestResult.Message += "\n\tUnable to confirm successful settings change.";
+                TestResult.Passed = false;
+            }
 
             return TestResult;
         }
@@ -928,7 +945,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
                 UrlEncodedMessage msg = new UrlEncodedMessage("find-package", new Dictionary<string, string>());
                 msg.Add("canonical-name", CanonicalName);
                 msg.Add("installed", (Installed != null ? ((Installed ?? false) ? "true" : "false") : "all"));
-                syncServer.Write(msg.ToString());
+                asyncServer.Write(msg.ToString());
 
                 while (true)
                 {
@@ -1305,7 +1322,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("unable-to-acquire", new Dictionary<string, string>());
                 msg.Add("remote-location", RemoteLocation);
-                asyncServer.Write(msg.ToString());
+                syncServer.Write(msg.ToString());
 
                 UrlEncodedMessage response = new UrlEncodedMessage(syncReturn.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
@@ -1327,7 +1344,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("remove-feed", new Dictionary<string, string>());
                 msg.Add("location", Location);
-                asyncServer.Write(msg.ToString());
+                syncServer.Write(msg.ToString());
 
                 UrlEncodedMessage response = new UrlEncodedMessage(syncReturn.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
@@ -1350,7 +1367,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
                 UrlEncodedMessage msg = new UrlEncodedMessage("remove-feed", new Dictionary<string, string>());
                 msg.Add("location", Location);
                 msg.Add("session", "true");
-                asyncServer.Write(msg.ToString());
+                syncServer.Write(msg.ToString());
 
                 UrlEncodedMessage response = new UrlEncodedMessage(syncReturn.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
@@ -1395,7 +1412,7 @@ Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).
                     bool _val = Blocked ?? false; // Active should never be null at this point in the code.
                     msg.Add("active", _val ? "true" : "false");
                 }
-                asyncServer.Write(msg.ToString());
+                syncServer.Write(msg.ToString());
 
                 UrlEncodedMessage response = new UrlEncodedMessage(syncReturn.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
