@@ -725,7 +725,6 @@ namespace ServicePipes
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("get-package-details", new Dictionary<string, string>());
                 msg.Add("canonical-name", CanonicalName);
-                msg.Add("rqid", TestResult.Name);
                 asyncServer.Write(msg.ToString());
 
                 UrlEncodedMessage response = new UrlEncodedMessage(asyncServer.Read(Timeout));
@@ -751,7 +750,6 @@ namespace ServicePipes
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("verify-file-signature", new Dictionary<string, string>());
                 msg.Add("filename", FileName);
-                msg.Add("rqid", TestResult.Name);
                 asyncServer.Write(msg.ToString());
 
                 UrlEncodedMessage response = new UrlEncodedMessage(asyncServer.Read(Timeout));
@@ -917,7 +915,11 @@ namespace ServicePipes
 
                 UrlEncodedMessage response = new UrlEncodedMessage(asyncServer.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
-                //in this test, receiving a message means that a failure has occurred.
+                if (response.Command.Equals("feed-removed"))
+                {
+                    if (Location.Equals(response["location"]))
+                        TestResult.Passed = true;
+                }
             }
             catch (TimeoutException) { TestResult.Passed = true; }
             catch { }
@@ -940,9 +942,12 @@ namespace ServicePipes
 
                 UrlEncodedMessage response = new UrlEncodedMessage(asyncServer.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
-                //in this test, receiving a message means that a failure has occurred.
+                if (response.Command.Equals("feed-removed"))
+                {
+                    if (Location.Equals(response["location"]))
+                        TestResult.Passed = true;
+                }
             }
-            catch (TimeoutException) { TestResult.Passed = true; }
             catch { }
 
             return TestResult;
