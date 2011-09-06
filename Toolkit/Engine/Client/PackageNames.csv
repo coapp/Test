@@ -1,0 +1,13 @@
+STR,Name,Ver,Arch,Token,Comment
+"libd-1.0.0.0-x86-0da32de74420310f","libd","1.0.0.0","x86","0da32de74420310f","Full canonical name"
+"-1.0.0.0-x86-0da32de74420310f","","1.0.0.0","x86","0da32de74420310f","Missing only name, leading hyphen"
+"1.0.0.0-x86-0da32de74420310f","","1.0.0.0","x86","0da32de74420310f","Missing only name, no leading hyphen"
+"libd--x86-0da32de74420310f","libd","","x86","0da32de74420310f","Missing only version, dual hyphens"
+"libd-x86-0da32de74420310f","libd","","x86","0da32de74420310f","Missing only version, single hyphen"
+"libd-1.0.0.0--0da32de74420310f","libd","1.0.0.0","","0da32de74420310f","Missing only arch, dual hyphen"
+"libd-1.0.0.0-0da32de74420310f","libd","1.0.0.0","","0da32de74420310f","Missing only arch, single hyphen"
+"libd-1.0.0.0-x86-","libd","1.0.0.0","x86","","Missing only token, trailing hyphen"
+"libd-1.0.0.0-x86","libd","1.0.0.0","x86","","Missing only token, no trailing hyphen"
+"--x86-0da32de74420310f","","","x86","0da32de74420310f","Missing name and version, dual leading hyphens"
+"libd-1.0.0.0-x86-0da32de74420310f","libd","1.0.0.0","x86","0da32de74420310f",
+"libd-1.0.0.0-x86-0da32de74420310f","libd","1.0.0.0","x86","0da32de74420310f",

@@ -6,11 +6,11 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{679D98B2-6713-4089-80B0-02091509CA45}</ProjectGuid>
+    <ProjectGuid>{9BB3CB5D-08D1-4779-ACFF-64BA1F2C4631}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test.Toolkit.Engine.Core</RootNamespace>
-    <AssemblyName>Test.Toolkit.Engine.Core</AssemblyName>
+    <RootNamespace>Test.CoApp.Toolkit.Engine.Client</RootNamespace>
+    <AssemblyName>Test.CoApp.ToolKit.Engine.Client</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -39,14 +39,17 @@
     <Reference Include="Microsoft.Deployment.WindowsInstaller.Package, Version=3.5.2519.73, Culture=neutral, PublicKeyToken=820d50196d4e8857, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
@@ -57,17 +60,23 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DynamicXml\TestDynamicDataRow.cs" />
-    <Compile Include="DynamicXml\TestDynamicDataSet.cs" />
-    <Compile Include="Configuration\TestRegistryView.cs" />
-    <Compile Include="DynamicXml\TestDynamicDataTable.cs" />
+    <Folder Include="Engine\Client\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\toolkit\CoApp.Toolkit.Engine.Core.csproj">
-      <Project>{CC917E10-0068-4E91-8D3D-76CB446F7E43}</Project>
-      <Name>CoApp.Toolkit.Engine.Core</Name>
+    <ProjectReference Include="..\..\toolkit\CoApp.Toolkit.csproj">
+      <Project>{8B7E0D2F-6CA0-4E5E-BF52-1E4BDB132BBC}</Project>
+      <Name>CoApp.Toolkit %28coapp.toolkit\CoApp.Toolkit%29</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\toolkit\CoApp.Toolkit.Engine.Client.csproj">
+      <Project>{CC917E10-0068-4E91-8D3D-3276846F7E43}</Project>
+      <Name>CoApp.Toolkit.Engine.Client</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Engine\TestPackageName.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Engine\PackageNames.csv" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
