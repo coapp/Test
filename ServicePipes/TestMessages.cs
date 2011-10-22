@@ -118,7 +118,7 @@ namespace ServicePipes
         private static Pipe syncServer;
         private static Pipe syncReturn;
 
-        private static string HelpMessage = 
+        private const string HelpMessage = 
             "\nUsage:  ServicePipes <Sync | Async> <System_Feed_Location> <Session_Feed_Location> <Local_Package_Name> [Timeout]"+
             "\n\n<Local_Package_Name>\tThis should be the path to a package not contained in any feed.\n"+
             "Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).\n\n";
@@ -888,7 +888,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncUnableToAcquire(string RemoteLocation = "Bad_File_Location")
+        private static Result AsyncUnableToAcquire(string CanonicalName = "Bad_Location-1.0.0.0-any-da642a7e5cd46921")
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -899,7 +899,7 @@ namespace ServicePipes
             try
             {
                 UrlEncodedMessage msg = new UrlEncodedMessage("unable-to-acquire", new Dictionary<string, string>());
-                msg.Add("remote-location", RemoteLocation);
+                msg.Add("canonical-name", CanonicalName);
                 msg.Add("rqid", TestResult.Name);
                 TestResult.Command = msg;
                 asyncServer.Write(msg.ToString());

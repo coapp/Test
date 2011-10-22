@@ -12,6 +12,9 @@
  */
 
 
+using System.Collections.Generic;
+using System.IO;
+
 namespace Test.cmdlets
 {
     public static class Server
@@ -19,6 +22,8 @@ namespace Test.cmdlets
         public static byte ReadDelimiter;
         public static byte ReadEOFDelimiter = 0x1D;
         public static string SendDelimiter = "^^^DONE^^^";
+        public static readonly byte StartBinary = 0x03; // ASCII "End of Text"
+        public static readonly byte EndBinary = 0x02; // ASCII "Start of Text"
 
         public static void Write(System.IO.Pipes.NamedPipeClientStream Pipe, byte[] Bytes, bool NoDelim = false)
         {
@@ -122,20 +127,42 @@ namespace Test.cmdlets
 
         protected override void ProcessRecord()
         {
-            System.Collections.ArrayList ByteArr = new System.Collections.ArrayList();
+            List<byte> ByteArr = new List<byte>();
             byte B;
             B = (byte)Pipe.ReadByte();
-            while (B != Server.ReadDelimiter)
+            if (B == Server.StartBinary) //is this a binary message or text?
             {
-                ByteArr.Add(B);
+                int sizeSize = Pipe.ReadByte(); ;
+                List<byte> sizeBytes = new List<byte>();
+                for (int i = 0; i < sizeSize; i++)
+                    sizeBytes.Add((byte)Pipe.ReadByte());
+                int size = int.Parse(CommonMethods.Bytes_To_String(sizeBytes.ToArray()));
+                for (int i = 0; i < size; i++)
+                {
+                    ByteArr.Add((byte)Pipe.ReadByte());
+                }
                 B = (byte)Pipe.ReadByte();
+                if (B != Server.EndBinary)
+                    throw new InvalidDataException("Message length was incorrect or message corruption has occurred.");
+                B = (byte)Pipe.ReadByte();
+                if (B != Server.ReadDelimiter)
+                    throw new InvalidDataException("Message length was incorrect or message corruption has occurred.");
+                WriteObject(ByteArr.ToArray());
             }
-            
-            byte[] Bytes = (byte[]) ByteArr.ToArray(typeof (byte));
-            if (AsBytes)
-                WriteObject(Bytes);
             else
-                WriteObject(CommonMethods.Bytes_To_String(Bytes));
+            {
+                while (B != Server.ReadDelimiter)
+                {
+                    ByteArr.Add(B);
+                    B = (byte) Pipe.ReadByte();
+                }
+
+                byte[] Bytes = ByteArr.ToArray();
+                if (AsBytes)
+                    WriteObject(Bytes);
+                else
+                    WriteObject(CommonMethods.Bytes_To_String(Bytes));
+            }
         }
     }
 

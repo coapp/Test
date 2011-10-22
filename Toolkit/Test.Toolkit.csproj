@@ -70,11 +70,8 @@
     <Compile Include="Extensions\CookieExtensionsTest.cs" />
     <Compile Include="Extensions\DebugExtensionsTest.cs" />
     <Compile Include="Extensions\DebugMessageTest.cs" />
-    <Compile Include="Extensions\FilesystemExtensionsTest.cs" />
     <Compile Include="Extensions\LinqExtensionsTest.cs" />
-    <Compile Include="Extensions\ObservableExtensionsTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Extensions\PropertySheetExtensionsTest.cs" />
     <Compile Include="Extensions\SortedObservableCollectionTest.cs" />
     <Compile Include="Extensions\StringExtensionsTest.cs" />
     <Compile Include="Extensions\WebExtensionsTest.cs" />

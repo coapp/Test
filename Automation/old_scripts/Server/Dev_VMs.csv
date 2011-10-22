@@ -1,0 +1,6 @@
+VM_Name, Base_VHD, Mem, CPU_Count, CPU_Limit, Script_File
+Test_Dev_2k3, W2k3-Dev-base.vhd, 1GB, 1, 100, Dev_User_script.ps1
+Test_Dev_2k8R2, Win2k8R2-Dev-base.vhd, 2GB, 2, 100, Dev_User_script.ps1
+Test_Dev_7x86, Win7-x86-Dev-base.vhd, 2GB, 2, 100, Dev_User_script.ps1
+Test_Dev_7x64, Win7-x64-Dev-base.vhd, 2GB, 2, 100, Dev_User_script.ps1
+Test_Dev_XP, WinXP-Dev-base.vhd, 1GB, 1, 100, Dev_User_script.ps1

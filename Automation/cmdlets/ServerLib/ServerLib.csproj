@@ -41,7 +41,6 @@
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -53,6 +52,7 @@
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">
       <Project>{B60AAE70-3D1E-42B6-8284-1EE42EB8C23F}</Project>
       <Name>CommonLib</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

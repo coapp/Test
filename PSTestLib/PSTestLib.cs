@@ -56,8 +56,8 @@ namespace PSTestLib
         { Host.UI.WriteLine("FeedInfo received: " + Location); }
         protected void ScanProgress(string Location, int Progress)
         { Host.UI.WriteLine("Scanning in progress:  " + Location + "  " + Progress + "%"); }
-        protected void InstallProgress(string CName, int Progress)
-        { Host.UI.WriteLine("Install in progress:  " + CName + "  " + Progress + "%"); }
+        protected void InstallProgress(string CName, int Progress, int TotalProgress)
+        { Host.UI.WriteLine("Install in progress:  " + CName + "  " + Progress + "%" + "  Total: " + TotalProgress + "%"); }
         protected void RemoveProgress(string CName, int Progress)
         { Host.UI.WriteLine("Remove in progress:  " + CName + "  " + Progress + "%"); }
         protected void InstallComplete(string CName)

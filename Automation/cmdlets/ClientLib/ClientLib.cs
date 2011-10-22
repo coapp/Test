@@ -19,27 +19,39 @@ namespace Test.cmdlets
         public static byte SendSingleDelimiter;
         public static string ReadMsgDelimiter = "^^^DONE^^^";
         public static byte EndOfProcessingDelimiter = 0x1D;
+        public static readonly byte StartBinary = 0x03; // ASCII "End of Text"
+        public static readonly byte EndBinary = 0x02; // ASCII "Start of Text"
+
+        public static void WriteBinary(byte[] Bytes, bool NoDelim = false)
+        {
+            byte[] sizeBytes = CommonMethods.String_To_Bytes(Bytes.ToString());
+            byte sizeSize = (byte)sizeBytes.Length; // as this length cannot be larger than a byte of characters, this should be fine
+            byte[] StartBin = {StartBinary, sizeSize};
+            Port.Write(StartBin, 0, StartBin.Length);
+            Port.Write(sizeBytes, 0, sizeBytes.Length);
+            Port.Write(Bytes, 0, Bytes.Length);
+            if (NoDelim) return;
+            byte[] Delim = { EndBinary, SendSingleDelimiter };
+            Port.Write(Delim, 0, 1);
+        }
 
         public static void Write(byte[] Bytes, bool NoDelim = false)
         {
-            foreach (byte B in Bytes)
-            {
-                Write(B,true);
-            }
+            Port.Write(Bytes, 0, Bytes.Length);
             if (NoDelim) return;
             byte[] Delim = { SendSingleDelimiter };
             Port.Write(Delim, 0, 1);
-            System.Threading.Thread.Sleep(2);
         }
+
         public static void Write(byte B, bool NoDelim = false)
         {
             byte[] BB = {B};
             Port.Write(BB,0,1);
-            System.Threading.Thread.Sleep(2);
             if (NoDelim) return;
             byte[] Delim = { SendSingleDelimiter };
             Port.Write(Delim, 0, 1);
         }
+
         public static void Write(string S, bool NoDelim = false)
         {
             Write(CommonMethods.String_To_Bytes(S),NoDelim);
