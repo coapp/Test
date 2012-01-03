@@ -459,6 +459,44 @@ namespace ServicePipes
 
                 UrlEncodedMessage response = new UrlEncodedMessage(asyncServer.Read(Timeout));
                 TestResult.Message += ("  Received message:\n\t" + response.ToString());
+                if (response.Command.Equals("require-remote-file"))
+                {
+                    bool KeepGoing = true;
+                    int remoteNum = 0;
+                    string destination = Path.Combine(response["destination"], response["canonical-name"]);
+                    while (KeepGoing)
+                    {
+                        if (!(response["remote-locations[" + remoteNum + "]"].Equals(String.Empty)))
+                            try
+                            {
+                                System.Net.WebClient WC = new System.Net.WebClient();
+                                WC.DownloadFile(response["remote-locations[" + remoteNum++ + "]"], destination);
+                                if (File.Exists(destination))
+                                    KeepGoing = false;
+                            }
+                            catch (Exception E)
+                            {
+                            }
+                        else
+                            KeepGoing = false;
+                    }
+
+                    UrlEncodedMessage msg2;
+                    if (File.Exists(destination))
+                    {
+                        msg2 = new UrlEncodedMessage("recognize-file", new Dictionary<string, string>());
+                        msg2.Add("local-location", destination);
+                    }
+                    else
+                    {
+                        msg2 = new UrlEncodedMessage("unable-to-acquire", new Dictionary<string, string>());
+                    }
+                    msg2.Add("canonical-name", response["canonical-name"].ToString());
+                    asyncServer.Write(msg2.ToString());
+
+                    response = new UrlEncodedMessage(asyncServer.Read(Timeout));
+                    TestResult.Message += ("  Received message:\n\t" + response.ToString());
+                }
                 if (response.Command.Equals("no-packages-found"))
                     TestResult.Passed = true;
             }
