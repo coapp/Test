@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
-using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using CoApp.Toolkit.Pipes;
@@ -112,108 +110,88 @@ namespace ServicePipes
         }
 
         private const string ServerName = ".";
+        private static int DefaultTimeout = 15000;
         private static int Timeout = 15000;
         private const string PipeName = @"CoAppInstaller";
         private static Pipe asyncServer;
-        private static Pipe syncServer;
-        private static Pipe syncReturn;
+
+        private const string StartError = "\x1b[40;1;31m";
+        private const string EndError = "\x1b[m";
+        private static bool ANSI = false;
+        private static int ErrCount;
 
         private const string HelpMessage = 
-            "\nUsage:  ServicePipes <Sync | Async> <System_Feed_Location> <Session_Feed_Location> <Local_Package_Name> [Timeout]"+
+            "\nUsage:  ServicePipes --sysfeed=<System_Feed_Location> --sesfeed=<Session_Feed_Location> --package=<Local_Package_Name> [optional switches]"+
             "\n\n<Local_Package_Name>\tThis should be the path to a package not contained in any feed.\n"+
-            "Timeout\t[optional]  Pipe communication timeout, in milliseconds (ms).\n\n";
+            "\n[optional parameters]\n"+
+            "\ttimeout\tPipe communication timeout, in milliseconds (ms).\n"+
+            "\tANSI\tOutput will use ANSI color instead of Windows Console color.\n\n";
 
-        static void Main(string[] args)
+        static int Main(string[] args)
         {
-            if (args.Length < 4)
+            args.Switches();
+            ErrCount = 0;
+
+            if (args.SwitchValue("help") != null)
             {
-                Console.Out.WriteLine("Insufficient parameters.\n" + HelpMessage);
-                return;
+                Console.Out.WriteLine(HelpMessage);
+                return -1;
             }
-            if (args.Length > 4)
-                if (!(Int32.TryParse(args[4], out Timeout)))
-                    Timeout = 3000;
+
+            if (args.SwitchValue("timeout") != null)
+                if (!(Int32.TryParse(args.SwitchValue("timeout"), out Timeout)))
+                    Timeout = DefaultTimeout;
+
+            string sysfeed = args.SwitchValue("sysfeed");
+            string sesfeed = args.SwitchValue("sesfeed");
+            string pack = args.SwitchValue("package");
+
+            if (args.SwitchValue("ansi") != null)
+                ANSI = true;
             
-            if (args[0].ToLower().Equals("async"))
+            if (sysfeed == null || sesfeed == null || pack == null)
             {
-                asyncServer = new Pipe(new NamedPipeClientStream(ServerName, PipeName, PipeDirection.InOut, PipeOptions.Asynchronous, TokenImpersonationLevel.Impersonation, HandleInheritability.Inheritable));
-                //asyncServer = new Pipe(new NamedPipeClientStream(PipeName));
-                if (AsyncConnect().Passed)
-                {
-                    // Add Async tests here
-                    Output(AsyncAddSystemFeed(args[1]));
-                    Output(AsyncAddSessionFeed(args[2]));
-                    Output(AsyncFindFeeds());
-                    Output(AsyncFindPackage_Failure());
-                    UrlEncodedMessage LocalPackage, FeedPackage;
-                    Output(AsyncRecognizeFile(args[3]));
-                    Output(AsyncFindAllPackages());
-                    string LocalName = args[3].Substring(args[3].LastIndexOf(@"\") + 1);
-                    LocalName = LocalName.Substring(0, LocalName.IndexOf('-'));
-                    Output(AsyncFindFirstPackageByName(LocalName, out LocalPackage));
-                    Output(AsyncFindFirstUninstalledPackage(out FeedPackage));
-                    Output(AsyncVerifySig(args[3]));
-                    Output(AsyncVerifySig(args[3],true));
-                    Output(AsyncUnableToAcquire());
-                    string LocalPackageCName = "LocalPackage_Failed_To_Be_Found";
-                    string FeedPackageCName = "FeedPackage_Failed_To_Be_Found";
-                    if (LocalPackage != null)
-                        LocalPackageCName = LocalPackage["canonical-name"];
-                    if (FeedPackage != null)
-                        FeedPackageCName = FeedPackage["canonical-name"];
-                    Output(AsyncPackageDetails(FeedPackageCName));
-                    Output(AsyncInstallImmaginaryPackage());
-                    Output(AsyncInstallLocalPackage(LocalPackageCName));
-                    Output(AsyncSetPackageAttribs(LocalPackageCName,null,null,false));
-                    Output(AsyncRemovePackage(LocalPackageCName));
-                    Output(AsyncRemoveSessionFeed(args[2]));
-                    Output(AsyncRemoveSystemFeed(args[1]));
-
-                    asyncServer.Close();
-                }
-            }
-            else if (args[0].ToLower().Equals("sync"))
-            {
-                /*
-                syncServer = new Pipe(new NamedPipeClientStream(ServerName, PipeName, PipeDirection.Out, PipeOptions.None, TokenImpersonationLevel.Impersonation, HandleInheritability.Inheritable));
-                //syncServer = new Pipe(new NamedPipeClientStream(PipeName));
-                if (SyncConnect().Passed)
-                {
-                    // Add Sync tests here
-                    Output(SyncAddSystemFeed(args[1]));
-                    Output(SyncAddSessionFeed(args[2]));
-                    Output(SyncFindFeeds());
-                    Output(SyncFindAllPackages());
-                    Output(SyncFindPackage_Failure());
-                    UrlEncodedMessage LocalPackage, FeedPackage;
-                    Output(SyncRecognizeFile(args[3]));
-                    Output(SyncFindFirstPackageByName(args[3], out LocalPackage));
-                    Output(SyncFindFirstUninstalledPackage(out FeedPackage));
-                    Output(SyncVerifySig(args[3]));
-                    Output(SyncVerifySig(args[3], true));
-                    Output(SyncUnableToAcquire());
-                    string LocalPackageCName = LocalPackage["canonical-name"];
-                    string FeedPackageCName = FeedPackage["canonical-name"];
-                    Output(SyncPackageDetails(FeedPackageCName));
-                    Output(SyncInstallImmaginaryPackage());
-                    Output(SyncInstallLocalPackage(LocalPackageCName));
-                    Output(SyncSetPackageAttribs(LocalPackageCName, null, null, false));
-                    Output(SyncRemovePackage(LocalPackageCName));
-                    Output(SyncRemoveSessionFeed(args[2]));
-                    Output(SyncRemoveSystemFeed(args[1]));
-
-
-                    syncServer.Close();
-                    syncReturn.Close();
-                }
-                */
-            }
-            else
-            {
-                Console.Out.WriteLine("Invalid initial parameter.\n" + HelpMessage);
-                return;
+                Console.Out.WriteLine(HelpMessage);
+                return -1;
             }
 
+            asyncServer = new Pipe(new NamedPipeClientStream(ServerName, PipeName, PipeDirection.InOut, PipeOptions.Asynchronous, TokenImpersonationLevel.Impersonation, HandleInheritability.Inheritable));
+            //asyncServer = new Pipe(new NamedPipeClientStream(PipeName));
+            if (Connect().Passed)
+            {
+                // Add Async tests here
+                Output(AddSystemFeed(sysfeed));
+                Output(AddSessionFeed(sesfeed));
+                Output(FindFeeds());
+                Output(FindPackage_Failure());
+                UrlEncodedMessage LocalPackage, FeedPackage;
+                Output(RecognizeFile(pack));
+                Output(FindAllPackages());
+                string LocalName = pack.Substring(pack.LastIndexOf(@"\") + 1);
+                LocalName = LocalName.Substring(0, LocalName.IndexOf('-'));
+                Output(FindFirstPackageByName(LocalName, out LocalPackage));
+                Output(FindFirstUninstalledPackage(out FeedPackage));
+                Output(VerifySig(pack));
+                Output(VerifySig(pack,true));
+                Output(UnableToAcquire());
+                string LocalPackageCName = "LocalPackage_Failed_To_Be_Found";
+                string FeedPackageCName = "FeedPackage_Failed_To_Be_Found";
+                if (LocalPackage != null)
+                    LocalPackageCName = LocalPackage["canonical-name"];
+                if (FeedPackage != null)
+                    FeedPackageCName = FeedPackage["canonical-name"];
+                Output(PackageDetails(FeedPackageCName));
+                Output(InstallImmaginaryPackage());
+                Output(InstallLocalPackage(LocalPackageCName));
+                Output(SetPackageAttribs(LocalPackageCName,null,null,false));
+                Output(RemovePackage(LocalPackageCName));
+                Output(RemoveSessionFeed(sesfeed));
+                Output(RemoveSystemFeed(sysfeed));
+
+                asyncServer.Close();
+            }
+
+            return ErrCount;
         }
 
         private static void Output(Result result)
@@ -221,22 +199,43 @@ namespace ServicePipes
             ConsoleColor fg = Console.ForegroundColor;
             if (!result.Passed)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.Out.WriteLine(result.Name);
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.Out.WriteLine("Command sent: "+result.Command.ToString());
+                ErrCount += 1;
 
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.Out.WriteLine("\t" + result.Message + "\n");
+                if (ANSI)
+                {
+                    Console.Out.Write(StartError);
+                    Console.Out.WriteLine(result.Name);
+                    Console.Out.Write(EndError);
+                    Console.Out.WriteLine("Command sent: " + result.Command.ToString());
+                    Console.Out.WriteLine("\t" + result.Message + "\n");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Out.WriteLine(result.Name);
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    Console.Out.WriteLine("Command sent: " + result.Command.ToString());
+
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Out.WriteLine("\t" + result.Message + "\n");
+                }
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Out.Write(result.Name);
-                Console.ForegroundColor = ConsoleColor.DarkGreen;
-                Console.Out.Write(" -- " + result.Command.ToString());
-                Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.Out.WriteLine(result.Success ?? string.Empty);
+                if (ANSI)
+                {
+                    Console.Out.Write(result.Name);
+                    Console.Out.WriteLine(result.Success ?? string.Empty);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Out.Write(result.Name);
+                    //Console.ForegroundColor = ConsoleColor.DarkGreen;
+                    //Console.Out.Write(" -- " + result.Command.ToString());
+                    Console.ForegroundColor = ConsoleColor.Magenta;
+                    Console.Out.WriteLine(result.Success ?? string.Empty);
+                }
             }
             Console.ForegroundColor = fg;
         }
@@ -254,7 +253,7 @@ namespace ServicePipes
         
         **/
 
-        private static Result AsyncConnect()
+        private static Result Connect()
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -290,7 +289,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncAddSystemFeed(string Location)
+        private static Result AddSystemFeed(string Location)
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -319,7 +318,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncAddSessionFeed(string Location)
+        private static Result AddSessionFeed(string Location)
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -349,7 +348,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncFindFeeds()
+        private static Result FindFeeds()
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -395,7 +394,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncFindAllPackages()
+        private static Result FindAllPackages()
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -419,7 +418,7 @@ namespace ServicePipes
                     {
                         case "found-package":
                             TestResult.Passed = true;
-                            TestResult.Success += "\n" + response["canonical-name"];
+                            //TestResult.Success += "\n" + response["canonical-name"];
                             break;
                         case "task-complete":
                             if (response["rqid"] == TestResult.Name)
@@ -443,7 +442,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncFindPackage_Failure()
+        private static Result FindPackage_Failure()
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -476,6 +475,7 @@ namespace ServicePipes
                             }
                             catch (Exception E)
                             {
+                                KeepGoing = false;
                             }
                         else
                             KeepGoing = false;
@@ -505,7 +505,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncFindFirstUninstalledPackage(out UrlEncodedMessage package)
+        private static Result FindFirstUninstalledPackage(out UrlEncodedMessage package)
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -555,7 +555,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncFindFirstPackageByName(string name, out UrlEncodedMessage package, string installed = "all")
+        private static Result FindFirstPackageByName(string name, out UrlEncodedMessage package, string installed = "all")
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -606,7 +606,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncInstallImmaginaryPackage()
+        private static Result InstallImmaginaryPackage()
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -646,7 +646,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncInstallLocalPackage(string CanonicalName)
+        private static Result InstallLocalPackage(string CanonicalName)
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -717,7 +717,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncRecognizeFile(string Location, string Remote = null, bool valid = true, bool? isPackage = true)
+        private static Result RecognizeFile(string Location, string Remote = null, bool valid = true, bool? isPackage = true)
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -781,7 +781,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncPackageDetails(string CanonicalName)
+        private static Result PackageDetails(string CanonicalName)
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -807,7 +807,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncVerifySig(string FileName)
+        private static Result VerifySig(string FileName)
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -833,7 +833,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncVerifySig(string FileName, bool isValid)
+        private static Result VerifySig(string FileName, bool isValid)
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -861,7 +861,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncRemovePackage(string CanonicalName)
+        private static Result RemovePackage(string CanonicalName)
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -926,7 +926,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncUnableToAcquire(string CanonicalName = "Bad_Location-1.0.0.0-any-da642a7e5cd46921")
+        private static Result UnableToAcquire(string CanonicalName = "Bad_Location-1.0.0.0-any-da642a7e5cd46921")
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -973,7 +973,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncRemoveSystemFeed(string Location)
+        private static Result RemoveSystemFeed(string Location)
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -1000,7 +1000,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static Result AsyncRemoveSessionFeed(string Location)
+        private static Result RemoveSessionFeed(string Location)
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -1035,7 +1035,7 @@ namespace ServicePipes
         /// <param name="Required">Set to True or False.  Pass 'null' to leave unchanged.</param>
         /// <param name="Blocked">Set to True or False.  Pass 'null' to leave unchanged.</param>
         /// <returns></returns>
-        private static Result AsyncSetPackageAttribs(string CanonicalName, bool? Active, bool? Required, bool? Blocked)
+        private static Result SetPackageAttribs(string CanonicalName, bool? Active, bool? Required, bool? Blocked)
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -1073,7 +1073,7 @@ namespace ServicePipes
             catch {}
 
             //verify that the change occurred
-            //UrlEncodedMessage check = AsyncGetPackage(CanonicalName);
+            //UrlEncodedMessage check = GetPackage(CanonicalName);
             if (check != null)
             {
                 if (Active != null)
@@ -1095,7 +1095,7 @@ namespace ServicePipes
             return TestResult;
         }
 
-        private static UrlEncodedMessage AsyncGetPackage(string CanonicalName, bool? Installed = null)
+        private static UrlEncodedMessage GetPackage(string CanonicalName, bool? Installed = null)
         {
             UrlEncodedMessage ret = null;
             try
@@ -1118,7 +1118,7 @@ namespace ServicePipes
             return ret;
         }
 
-        private static Result AsyncStupidLongAddFeedRequest()
+        private static Result StupidLongAddFeedRequest()
         {
             Result TestResult = new Result();
             TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -1152,107 +1152,6 @@ namespace ServicePipes
                 }
             }
             catch {}
-
-            return TestResult;
-        }
-
-        private static Result SyncConnect()
-        {
-            Result TestResult = new Result();
-            TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            TestResult.Message = "Failed sync connection.";
-            TestResult.Passed = false;
-            try
-            {
-                //Send the connection message
-                syncServer.Connect(Timeout);
-                syncServer.pipe.ReadMode = PipeTransmissionMode.Message;
-                UrlEncodedMessage msg = new UrlEncodedMessage("start-session", new Dictionary<string, string>());
-                msg.Add("client", "SyncTestClient");
-                msg.Add("id", "SyncUniqueID");
-                msg.Add("async", "false");
-                TestResult.Command = msg;
-                syncServer.Write(msg.ToString());
-
-                //Receive the response
-                syncReturn = new Pipe(new NamedPipeClientStream(ServerName, PipeName + "-SyncUniqueID", PipeDirection.In, PipeOptions.None, TokenImpersonationLevel.Impersonation, HandleInheritability.Inheritable));
-                //syncReturn = new Pipe(new NamedPipeClientStream(PipeName + "-SyncUniqueID"));
-                syncReturn.Connect(Timeout);
-                syncReturn.pipe.ReadMode = PipeTransmissionMode.Message;
-                UrlEncodedMessage response = new UrlEncodedMessage(syncReturn.Read(Timeout));
-                TestResult.Message += ("  Received message:\n\t" + response.ToString());
-                // check the command and data to make sure it's correct;
-                switch (response.Command)
-                {
-                    case "session-started":
-                        TestResult.Passed = true;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (TimeoutException)
-            { TestResult.Message += "  Timeout expired."; }
-            catch { }
-
-            return TestResult;
-        }
-
-        private static Result SyncAddSystemFeed(string Location)
-        {
-            Result TestResult = new Result();
-            TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            TestResult.Message = "Failed adding Sync feed.";
-            TestResult.Passed = false;
-            try
-            {
-                UrlEncodedMessage msg = new UrlEncodedMessage("add-feed", new Dictionary<string, string>());
-                msg.Add("location", Location);
-                TestResult.Command = msg;
-                syncServer.Write(msg.ToString());
-
-                UrlEncodedMessage response = new UrlEncodedMessage(syncReturn.Read(Timeout));
-                TestResult.Message += ("  Received message:\n\t" + response.ToString());
-                switch (response.Command)
-                {
-                    case "feed-added":
-                        TestResult.Passed = true;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch { }
-
-            return TestResult;
-        }
-
-        private static Result SyncAddSessionFeed(string Location)
-        {
-            Result TestResult = new Result();
-            TestResult.Name = System.Reflection.MethodBase.GetCurrentMethod().Name;
-            TestResult.Message = "Failed adding Sync feed.";
-            TestResult.Passed = false;
-            try
-            {
-                UrlEncodedMessage msg = new UrlEncodedMessage("add-feed", new Dictionary<string, string>());
-                msg.Add("location", Location);
-                msg.Add("session", "true");
-                TestResult.Command = msg;
-                syncServer.Write(msg.ToString());
-
-                UrlEncodedMessage response = new UrlEncodedMessage(syncReturn.Read(Timeout));
-                TestResult.Message += ("  Received message:\n\t" + response.ToString());
-                switch (response.Command)
-                {
-                    case "feed-added":
-                        TestResult.Passed = true;
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch { }
 
             return TestResult;
         }
