@@ -168,7 +168,7 @@ namespace ServicePipes
                 Output(RecognizeFile(pack));
                 Output(FindAllPackages());
                 string LocalName = pack.Substring(pack.LastIndexOf(@"\") + 1);
-                LocalName = LocalName.Substring(0, LocalName.IndexOf('-'));
+                //LocalName = LocalName.Substring(0, LocalName.IndexOf('-'));
                 Output(FindFirstPackageByName(LocalName, out LocalPackage));
                 Output(FindFirstUninstalledPackage(out FeedPackage));
                 Output(VerifySig(pack));
