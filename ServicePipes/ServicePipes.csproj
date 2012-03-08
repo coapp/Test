@@ -34,9 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CoApp.Toolkit, Version=1.1.2.1284, Culture=neutral, PublicKeyToken=820d50196d4e8857, processorArchitecture=MSIL">
+    <Reference Include="CoApp.Toolkit, Version=1.1.2.1383, Culture=neutral, PublicKeyToken=1e373a58e25250cb, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\CoApp.Toolkit\v4.0_1.1.2.1266__820d50196d4e8857\CoApp.Toolkit.dll</HintPath>
+      <HintPath>..\..\..\Windows\Microsoft.NET\assembly\GAC_MSIL\CoApp.Toolkit\v4.0_1.1.2.1358__1e373a58e25250cb\CoApp.Toolkit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
